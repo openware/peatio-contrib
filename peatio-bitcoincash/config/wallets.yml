@@ -1,0 +1,47 @@
+- name:             Bitcoincash Deposit Wallet
+  blockchain_key:   bch-testnet
+  currency_id:      bch
+  # Address where deposits will be collected to.
+  # IMPORTANT:  Use Cash Address Format
+  address:          'bchtest:qqpkpjpsv5ngwjet9alaktdhklgcrlf9qg9l4ta2w5'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             deposit       # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1             # Number of signatures required for performing withdraw.
+  max_balance:      0.0
+  status:           active
+  gateway:          bitcoincashd  # Gateway client name.
+  settings:
+    #
+    # Bitcoincashd gateway client settings.
+    uri:          http://user:password@127.0.0.1:18332
+
+- name:             Bitcoincash Hot Wallet
+  blockchain_key:   bch-testnet
+  currency_id:      bch
+  # Address where deposits will be collected to.
+  # IMPORTANT:  Use Cash Address Format
+  address:          'bchtest:qqpkpjpsv5ngwjet9alaktdhklgcrlf9qg9l4ta2w5'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             hot     # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      5.0
+  status:           active
+  gateway:          bitcoincashd   # Gateway client name.
+  settings:
+    #
+    # Bitcoincashd gateway client settings.
+    uri:          http://user:password@127.0.0.1:18332
+
+- name:             Bitcoincash Warm Wallet
+  blockchain_key:   bch-testnet
+  currency_id:      bch
+  # Address where deposits will be collected to.
+  # IMPORTANT:  Use Cash Address Format
+  address:          'bchtest:qqpkpjpsv5ngwjet9alaktdhklgcrlf9qg9l4ta2w5'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             warm    # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      50.0
+  status:           active
+  gateway:          bitcoincashd   # Gateway client name.
+  settings:
+    #
+    # Bitcoincashd gateway client settings.
+    uri:          http://user:password@127.0.0.1:18332

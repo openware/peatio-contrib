@@ -1,0 +1,18 @@
+- id:                     bch
+  name:                   Bitcoin Cash
+  blockchain_key:         bch-testnet
+  symbol:                 '฿'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0000748
+  min_collection_amount:  0.0000748
+  withdraw_limit_24h:     0.1
+  withdraw_limit_72h:     0.2
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               4
+  options:                {}

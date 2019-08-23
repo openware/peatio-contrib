@@ -1,0 +1,10 @@
+- key:               bch-testnet
+  name:              Bitcoincash Testnet
+  client:            bitcoincash                             # API client name.
+  server:            http://user:password@127.0.0.1:18332    # Public Bitcoincash node endpoint.
+  height:            1087160                                 # Initial block number from which sync will be started.
+  min_confirmations: 6                                       # Minimal confirmations needed for withdraw and deposit confirmation.
+  explorer:
+    address:         https://www.blocktrail.com/tBCC/address/#{address}
+    transaction:     https://www.blocktrail.com/tBCC/tx/#{txid}
+  status:            active
