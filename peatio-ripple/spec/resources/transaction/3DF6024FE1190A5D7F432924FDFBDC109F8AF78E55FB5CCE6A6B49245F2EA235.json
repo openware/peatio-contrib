@@ -1,0 +1,58 @@
+{
+  "Account": "r3j2QEMf8XAkQAu4t2xRB77etgJKW9UpRz",
+  "Amount": "27814999980",
+  "Destination": "rno4GxpYvfs5yb9H1jeMkWi2DEUqiC7Sdp",
+  "DestinationTag": 1,
+  "Fee": "20",
+  "Flags": 2147483648,
+  "LastLedgerSequence": 19432771,
+  "Sequence": 20728,
+  "SigningPubKey": "022D54C3D730320780BA037A41C36BFFD15BB853488714B69F8D5A98084CCC9837",
+  "TransactionType": "Payment",
+  "TxnSignature": "3044022008783866AFFD496A585A1C69A638DD0B622128254F39A36FE6D7F5A8AA1097D802207589779FF00884CC8CAF4DBE508E4FA7CAEEF7083443F0FB53D2814B5382C1BE",
+  "hash": "3DF6024FE1190A5D7F432924FDFBDC109F8AF78E55FB5CCE6A6B49245F2EA235",
+  "metaData": {
+    "AffectedNodes": [
+      {
+        "ModifiedNode": {
+          "FinalFields": {
+            "Account": "r3j2QEMf8XAkQAu4t2xRB77etgJKW9UpRz",
+            "Balance": "5906999980",
+            "Flags": 0,
+            "OwnerCount": 0,
+            "Sequence": 20729
+          },
+          "LedgerEntryType": "AccountRoot",
+          "LedgerIndex": "69816ABBC7906C6DA6631A47AE961D7B4ACD121F4709F664764DD3D1E307526A",
+          "PreviousFields": {
+            "Balance": "33721999980",
+            "Sequence": 20728
+          },
+          "PreviousTxnID": "E156CF9955DF9517FC57C8B93B2962B1B54217207F3C800FE3106E0E9567C47B",
+          "PreviousTxnLgrSeq": 19431571
+        }
+      },
+      {
+        "ModifiedNode": {
+          "FinalFields": {
+            "Account": "rno4GxpYvfs5yb9H1jeMkWi2DEUqiC7Sdp",
+            "Balance": "4202670630083959",
+            "Flags": 0,
+            "OwnerCount": 0,
+            "Sequence": 393799
+          },
+          "LedgerEntryType": "AccountRoot",
+          "LedgerIndex": "ED312301E0EE0192974F6A89B0325DA1375704BB43C09CC8B463DEB97FE34D54",
+          "PreviousFields": {
+            "Balance": "4202642815083979"
+          },
+          "PreviousTxnID": "3A4060B05CD119A62E21505039C2E70E304F8552B8298A6414D2C1B0B93A67FF",
+          "PreviousTxnLgrSeq": 19431565
+        }
+      }
+    ],
+    "TransactionIndex": 0,
+    "TransactionResult": "tesSUCCESS",
+    "delivered_amount": "27814999980"
+  }
+}

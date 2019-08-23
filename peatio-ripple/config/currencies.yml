@@ -1,0 +1,18 @@
+- id:                     xrp
+  name:                   Ripple
+  blockchain_key:         xrp-testnet
+  symbol:                 'ꭆ'
+  type:                   coin
+  precision:              8
+  base_factor:            1_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0001
+  min_collection_amount:  0.0001
+  withdraw_limit_24h:     100
+  withdraw_limit_72h:     200
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               1
+  options:                {}

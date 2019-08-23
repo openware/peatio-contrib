@@ -1,0 +1,20 @@
+{
+  "result": {
+    "account_data": {
+      "Account": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+      "Balance": "2309708769018",
+      "Flags": 1048576,
+      "LedgerEntryType": "AccountRoot",
+      "OwnerCount": 0,
+      "PreviousTxnID": "79D59285008E91C25FFA589FD2A0F37D4814362921929B16B939565A186B0864",
+      "PreviousTxnLgrSeq": 19431159,
+      "RegularKey": "r479Q1f3xm4VfAxNLoXAVKhSN1E8FArztD",
+      "Sequence": 78,
+      "index": "2B6AC232AA4C4BE41BF49D2459FA4A0347E1B543A4C92FCEE0821C0201E2E9A8"
+    },
+    "ledger_hash": "7922B8CFFC75D8A51AF75029660029F2C9C6FF4A5B33258F76C98F647640B084",
+    "ledger_index": 19541444,
+    "status": "success",
+    "validated": true
+  }
+}

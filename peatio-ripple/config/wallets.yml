@@ -1,0 +1,46 @@
+- name:             Ripple Deposit Wallet
+  blockchain_key:   xrp-testnet
+  currency_id:      xrp
+  address:          'r4kpJtnx4goLYXoRdi7mbkRpZ9Xpx2RyPN'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             deposit  # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1        # Number of signatures required for performing withdraw.
+  max_balance:      0.0
+  status:           active
+  gateway:          rippled     # Gateway client name.
+  settings:
+    #
+    # Rippled gateway client settings.
+    uri:          http://127.0.0.1:5005
+    secret:       'changeme'
+
+- name:             Ripple Hot Wallet
+  blockchain_key:   xrp-testnet
+  currency_id:      xrp
+  # Address where deposits will be collected to.
+  address:          'r4kpJtnx4goLYXoRdi7mbkRpZ9Xpx2RyPN'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             hot     # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      100.0
+  status:           active
+  gateway:          rippled    # Gateway client name.
+  settings:
+    #
+    # Rippled gateway client settings.
+    uri:          http://127.0.0.1:5005
+    secret:       'changeme'
+
+- name:             Ripple Warm Wallet
+  blockchain_key:   xrp-testnet
+  currency_id:      xrp
+  # Address where deposits will be collected to.
+  address:          'r4kpJtnx4goLYXoRdi7mbkRpZ9Xpx2RyPN'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             warm    # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      1000.0
+  status:           active
+  gateway:          rippled    # Gateway client name.
+  settings:
+    #
+    # Rippled gateway client settings.
+    uri:          http://user:password@127.0.0.1:5005
+    secret:       'changeme'

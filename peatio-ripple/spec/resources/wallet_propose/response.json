@@ -1,0 +1,12 @@
+{
+  "result": {
+    "account_id": "rEGLrcqUjP5MRXevoz3hnbtjsdcWwyGzYN",
+    "key_type": "secp256k1",
+    "master_key": "YE VEND DAYS LEAN BUB TOLL SMOG KARL KURD AS LOG ABUT",
+    "master_seed": "sh63UPJnAYohLay1sfna2i5eUhUPc",
+    "master_seed_hex": "8F56D201A2AA34E0DA8D1056C285DE46",
+    "public_key": "aBQTY9FYWHUSNu59RB7wmL2emsSXTN3mWATocSLXzEjEp7B51eAB",
+    "public_key_hex": "0349530E598C2FA8630E210423B5165DE80A88951799E5442888650A17923D5E04",
+    "status": "success"
+  }
+}

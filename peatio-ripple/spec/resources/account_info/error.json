@@ -1,0 +1,14 @@
+{
+  "result": {
+    "error": "actMalformed",
+    "error_code": 35,
+    "error_message": "Account malformed.",
+    "request": {
+      "account": "rHb9CJAWyB3rj91VRWn96DkukG4bwdtyTh",
+      "command": "account_info",
+      "ledger_index": "validated",
+      "strict": true
+    },
+    "status": "error"
+  }
+}

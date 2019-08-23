@@ -1,0 +1,12 @@
+{
+  "result": {
+    "error": "unknownCmd",
+    "error_code": 32,
+    "error_message": "Unknown method.",
+    "request": {
+      "command": "ledger1",
+      "ledger_index": "validated"
+    },
+    "status": "error"
+  }
+}
