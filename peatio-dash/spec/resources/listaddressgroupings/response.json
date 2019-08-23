@@ -1,0 +1,31 @@
+{
+  "result": [
+    [
+      [
+        "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
+        74.54849774
+      ],
+      [
+        "yYV5LHb6FVY5qWx7nrfARNVwRyHwLoXcQu",
+        0.00000000,
+        ""
+      ]
+    ],
+    [
+      [
+        "yXvnaB7Xbwi2kv7BzqktJRghFn3hhUUyvd",
+        132.61290000,
+        ""
+      ]
+    ],
+    [
+      [
+        "yiApaDUZZfLyvU2N33ysJm8MV9TsVU9K4t",
+        134.22200000,
+        ""
+      ]
+    ]
+  ],
+  "error": null,
+  "id": "curltext"
+}
