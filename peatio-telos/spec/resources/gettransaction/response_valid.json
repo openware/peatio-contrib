@@ -1,0 +1,61 @@
+{
+    "status": "executed",
+    "cpu_usage_us": 236,
+    "net_usage_words": 17,
+    "trx": {
+        "id": "8a54dfb8094a11ddce48fdb9d53a881ceb92d1302cc66f4a190d597b5c7243b7",
+        "signatures": [
+            "SIG_K1_KZtS4a32oSrbL7H1n9BLmJtaBm9MN37Li48L8v5yqoqQ245keJrmMFHjNLYzTDSDfNgMfHDedZufsSaAxDW875acpswWfv"
+        ],
+        "compression": "none",
+        "packed_context_free_data": "",
+        "context_free_data": [],
+        "packed_trx": "f9e9b95c9dc3d29b58a4000000000100a6823403ea3055000000572d3ccdcd01e05332299993286500000000a8ed323228e05332299993286510a6baee5323a989010000000000000004454f5300000000073431383936343000",
+        "transaction": {
+            "expiration": "2019-04-19T15:32:09",
+            "ref_block_num": 50077,
+            "ref_block_prefix": 2757270482,
+            "max_net_usage_words": 0,
+            "max_cpu_usage_ms": 0,
+            "delay_sec": 0,
+            "context_free_actions": [],
+            "actions": [
+                {
+                    "account": "eosio.token",
+                    "name": "transfer",
+                    "authorization": [
+                        {
+                            "actor": "goodbaddaddy",
+                            "permission": "active"
+                        }
+                    ],
+                    "data": {
+                        "from": "goodbaddaddy",
+                        "to": "laomaoziren1",
+                        "quantity": "0.0001 TLOS",
+                        "memo": "ID6816C3C8C5"
+                    },
+                    "hex_data": "e05332299993286510a6baee5323a989010000000000000004454f53000000000734313839363430"
+                },
+                {
+                    "account": "eosio.token",
+                    "name": "transfer",
+                    "authorization": [
+                        {
+                            "actor": "goodbaddaddy",
+                            "permission": "active"
+                        }
+                    ],
+                    "data": {
+                        "from": "goodbaddaddy",
+                        "to": "laomaoziren1",
+                        "quantity": "0.0001 TLS",
+                        "memo": "ID6816C3C8C5"
+                    },
+                    "hex_data": "e05332299993286510a6baee5323a989010000000000000004454f53000000000734313839363430"
+                }
+            ],
+            "transaction_extensions": []
+        }
+    }
+}

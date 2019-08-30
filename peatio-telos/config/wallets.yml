@@ -1,0 +1,56 @@
+- name:             Telos Deposit Wallet
+  blockchain_key:   telos-testnet
+  currency_id:      telos
+  # Address where deposits will be collected to.
+  address:          'southafridep'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             deposit    # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1          # Number of signatures required for performing withdraw.
+  max_balance:      0.0
+  status:           active
+  gateway:          telos  # Gateway client name.
+  settings:
+    #
+    # Telos gateway client settings.
+    #
+    # We need to communicate with ktelosd to sign transaction,
+    # ktelosd is running on non default telos port which is 8900
+    # and passed to json_rpc function when we sign transaction
+    uri:          http://127.0.0.1:8888
+
+- name:             Telos Hot Wallet
+  blockchain_key:   telos-testnet
+  currency_id:      telos
+  # Address where deposits will be collected to.
+  address:          'southafrihot'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             hot     # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      1000.0
+  status:           active
+  gateway:          telos   # Gateway client name.
+  settings:
+    #
+    # Telos gateway client settings.
+    #
+    # We need to communicate with ktelosd to sign transaction,
+    # ktelosd is running on non default telos port which is 8900
+    # and passed to json_rpc function when we sign transaction
+    uri:          http://127.0.0.1:8888
+
+- name:             Telos Warm Wallet
+  blockchain_key:   telos-testnet
+  currency_id:      telos
+  # Address where deposits will be collected to.
+  address:          'southafriwrm'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             warm    # Wallet kind (deposit, hot, warm, cold or fee).
+  nsig:             1       # Number of signatures required for performing withdraw.
+  max_balance:      10000.0
+  status:           active
+  gateway:          telos  # Gateway client name.
+  settings:
+    #
+    # Telos gateway client settings.
+    #
+    # We need to communicate with ktelosd to sign transaction,
+    # ktelosd is running on non default telos port which is 8900
+    # and passed to json_rpc function when we sign transaction
+    uri:          http://127.0.0.1:8888

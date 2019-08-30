@@ -1,0 +1,51 @@
+{
+    "status":"executed",
+    "cpu_usage_us":237,
+    "net_usage_words":15,
+    "trx":{
+        "id":"e94f0f39d3496382b2fb49008cc9f1f05f8ef9c53d92d43cef52cfdb2042bb4d",
+        "signatures":[
+            "SIG_K1_K6rw6FB5bChwC9wHytMemXYP3jmoUKAS4Xq6tYNRKtaLBjCf2hfBJbGdRg1qQDDJNCzPfrAatYMePVApmUE92257KL2i7x"
+        ],
+        "compression":"none",
+        "packed_context_free_data":"",
+        "context_free_data":[
+
+        ],
+        "packed_trx":"5836b85cea8db91e6e5900000000010000000000ea30557015d289deaa32dd013015a4b96475305500000000a8ed3232193015a4b9647530550000000000000000011042c053419ab36200",
+        "transaction":{
+            "expiration":"2019-04-18T08:33:28",
+            "ref_block_num":36330,
+            "ref_block_prefix":1500389049,
+            "max_net_usage_words":0,
+            "max_cpu_usage_ms":0,
+            "delay_sec":0,
+            "context_free_actions":[
+
+            ],
+            "actions":[
+                {
+                    "account":"telosio",
+                    "name":"voteproducer",
+                    "authorization":[
+                        {
+                            "actor":"telosbet5token",
+                            "permission":"active"
+                        }
+                    ],
+                    "data":{
+                        "voter":"telosbet5token",
+                        "proxy":"",
+                        "producers":[
+                            "gettokens111"
+                        ]
+                    },
+                    "hex_data":"3015a4b9647530550000000000000000011042c053419ab362"
+                }
+            ],
+            "transaction_extensions":[
+
+            ]
+        }
+    }
+}
