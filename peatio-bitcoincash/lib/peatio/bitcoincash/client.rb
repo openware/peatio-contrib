@@ -48,15 +48,15 @@ module Peatio
       private
 
       def connection
-        Faraday.new(@json_rpc_endpoint).tap do |connection|
+        @connection ||= Faraday.new(@json_rpc_endpoint) do |f|
+          f.adapter :net_http_persistent, pool_size: 5
+        end.tap do |connection|
           unless @json_rpc_endpoint.user.blank?
             connection.basic_auth(@json_rpc_endpoint.user,
                                   @json_rpc_endpoint.password)
           end
         end
       end
-      memoize :connection
     end
   end
 end
-

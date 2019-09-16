@@ -1,11 +1,12 @@
 PATH
   remote: .
   specs:
-    peatio-dash (0.1.0)
+    peatio-dash (0.1.1)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
       memoist (~> 0.16.0)
+      net-http-persistent (~> 3.0.1)
       peatio (~> 0.6.1)
 
 GEM
@@ -25,15 +26,16 @@ GEM
       amq-protocol (>= 2.2.0)
       eventmachine
     ast (2.4.0)
-    better-faraday (1.0.6)
+    better-faraday (1.0.8)
       activesupport (>= 4.0, < 6.0)
       faraday (~> 0.12)
     bunny (2.14.2)
       amq-protocol (~> 2.3, >= 2.3.0)
     byebug (11.0.1)
-    clamp (1.3.0)
+    clamp (1.3.1)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
+    connection_pool (2.2.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.3)
@@ -60,6 +62,8 @@ GEM
       metaclass (~> 0.0.1)
     multipart-post (2.1.1)
     mysql2 (0.5.2)
+    net-http-persistent (3.0.1)
+      connection_pool (~> 2.2)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
