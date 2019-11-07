@@ -79,7 +79,7 @@ module Peatio
                              to_address: address,
                              status: check_status(tx_hash),
                              currency_id: currency[:id],
-                             amount: convert_from_base_unit(tx_hash.fetch('Amount'), currency) }
+                             amount: convert_from_base_unit(tx_hash.dig('metaData', 'delivered_amount'), currency) }
         end
       end
 
@@ -94,7 +94,7 @@ module Peatio
       def valid_transaction?(tx)
         inspect_address!(tx['Account'])[:is_valid] &&
           tx['TransactionType'].to_s == 'Payment' &&
-          String === tx['Amount']
+          String === tx.dig('metaData', 'delivered_amount')
       end
 
       def inspect_address!(address)
