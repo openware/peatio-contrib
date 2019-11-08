@@ -1,0 +1,190 @@
+{
+    "Account": "rLttJ433vtcuwSn6TEUwE16h4vanvBjFSM",
+    "Amount": "100000000",
+    "Destination": "rBojAWczwDBuZoscCJWpHYF6gMFpKjwu7e",
+    "DestinationTag": 349553,
+    "Fee": "12",
+    "Flags": 2147614720,
+    "LastLedgerSequence": 51020826,
+    "Memos": [
+    {
+        "Memo": {
+        "MemoData": "726D2D312E322E34",
+        "MemoType": "636C69656E74"
+        }
+    }
+    ],
+    "SendMax": {
+    "currency": "USD",
+    "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+    "value": "0.001"
+    },
+    "Sequence": 214,
+    "SigningPubKey": "0228B88C4CDD58FA03FE2DE08ECF1E7402BF140B4D8E5F5220054E27744647EEA2",
+    "TransactionType": "Payment",
+    "TxnSignature": "30450221009DAF66FADA1974EE659567B0DFED4B79BF4CA34C3DC1B0E47FBD26C3A0BE56E9022027B90EEA21C7DA879CE39EC930247D719A05A6E63AD2A472D34DD1949AA455F5",
+    "hash": "2CCE7B98DD8783E9B40E5B4149ED999A555FBFC887AB397C743B0562CAB5DE23",
+    "metaData": {
+    "AffectedNodes": [
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Balance": {
+                "currency": "USD",
+                "issuer": "rrrrrrrrrrrrrrrrrrrrBZbvji",
+                "value": "-1.522918594086451"
+            },
+            "Flags": 2228224,
+            "HighLimit": {
+                "currency": "USD",
+                "issuer": "rLttJ433vtcuwSn6TEUwE16h4vanvBjFSM",
+                "value": "0"
+            },
+            "HighNode": "0000000000000000",
+            "LowLimit": {
+                "currency": "USD",
+                "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+                "value": "0"
+            },
+            "LowNode": "0000000000001B7A"
+            },
+            "LedgerEntryType": "RippleState",
+            "LedgerIndex": "2D440232EF843201EEB43314788E96283435DD3B1C7A02E98B9C833AB1A1F658",
+            "PreviousFields": {
+            "Balance": {
+                "currency": "USD",
+                "issuer": "rrrrrrrrrrrrrrrrrrrrBZbvji",
+                "value": "-1.523918594086451"
+            }
+            },
+            "PreviousTxnID": "81F17A15C3F73F302D2316D65B77131E1DC2FC600D91DEDFA9CA1644E6074D96",
+            "PreviousTxnLgrSeq": 51020347
+        }
+        },
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Account": "r4pgX8eBsWBfg7es8P4B6eMLSkTaoyTXCa",
+            "Balance": "265486609",
+            "Flags": 0,
+            "OwnerCount": 5,
+            "Sequence": 30531
+            },
+            "LedgerEntryType": "AccountRoot",
+            "LedgerIndex": "386239BB6C6648169F64980393F8CBD3CF4A174A4EACAC391317465F7795B396",
+            "PreviousFields": {
+            "Balance": "265490033"
+            },
+            "PreviousTxnID": "0E800EFAC5118FB58DBF3318B158D42CC06F16B160E721748039B358D9DA6B9A",
+            "PreviousTxnLgrSeq": 51020817
+        }
+        },
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Account": "r4pgX8eBsWBfg7es8P4B6eMLSkTaoyTXCa",
+            "BookDirectory": "79C54A4EBD69AB2EADCE313042F36092BE432423CC6A4F784E0A5B5D5851B481",
+            "BookNode": "0000000000000000",
+            "Flags": 131072,
+            "OwnerNode": "0000000000000000",
+            "Sequence": 30530,
+            "TakerGets": "38057725",
+            "TakerPays": {
+                "currency": "USD",
+                "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+                "value": "11.09461189861938"
+            }
+            },
+            "LedgerEntryType": "Offer",
+            "LedgerIndex": "81E5CC94EDF46D08AA512ED5796A133E85D8A4BDC67F1E4EB9B774035799D4D5",
+            "PreviousFields": {
+            "TakerGets": "38061149",
+            "TakerPays": {
+                "currency": "USD",
+                "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+                "value": "11.09560990261139"
+            }
+            },
+            "PreviousTxnID": "0E800EFAC5118FB58DBF3318B158D42CC06F16B160E721748039B358D9DA6B9A",
+            "PreviousTxnLgrSeq": 51020817
+        }
+        },
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Account": "rBojAWczwDBuZoscCJWpHYF6gMFpKjwu7e",
+            "Balance": "120483052",
+            "Flags": 0,
+            "OwnerCount": 0,
+            "Sequence": 19
+            },
+            "LedgerEntryType": "AccountRoot",
+            "LedgerIndex": "86BECD5159E1AE2F882F42A235489337875C8FBDA588BB30E6EA25FD73740F35",
+            "PreviousFields": {
+            "Balance": "120479628"
+            },
+            "PreviousTxnID": "22E1427570C439BE26E8DFD1E0E5A52C8F8BD3B9AF65113F1FEB93341B483BCE",
+            "PreviousTxnLgrSeq": 49969119
+        }
+        },
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Balance": {
+                "currency": "USD",
+                "issuer": "rrrrrrrrrrrrrrrrrrrrBZbvji",
+                "value": "-34.74660350637277"
+            },
+            "Flags": 2228224,
+            "HighLimit": {
+                "currency": "USD",
+                "issuer": "r4pgX8eBsWBfg7es8P4B6eMLSkTaoyTXCa",
+                "value": "0"
+            },
+            "HighNode": "0000000000000000",
+            "LowLimit": {
+                "currency": "USD",
+                "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+                "value": "0"
+            },
+            "LowNode": "0000000000001B75"
+            },
+            "LedgerEntryType": "RippleState",
+            "LedgerIndex": "92952CCEC84DBEE6D7FDDF671D2597C98F2D952C60097E8C666A43D45747574C",
+            "PreviousFields": {
+            "Balance": {
+                "currency": "USD",
+                "issuer": "rrrrrrrrrrrrrrrrrrrrBZbvji",
+                "value": "-34.74560550238076"
+            }
+            },
+            "PreviousTxnID": "C80256AE43F199370799D227F33305F7B9C412D8815DDA5532C581945D666F88",
+            "PreviousTxnLgrSeq": 51020418
+        }
+        },
+        {
+        "ModifiedNode": {
+            "FinalFields": {
+            "Account": "rLttJ433vtcuwSn6TEUwE16h4vanvBjFSM",
+            "Balance": "34999496",
+            "Flags": 0,
+            "OwnerCount": 2,
+            "Sequence": 215
+            },
+            "LedgerEntryType": "AccountRoot",
+            "LedgerIndex": "FDADAF7146A67B8E1125D0091FC4F60745602D1DC217546835C373AA12C2C655",
+            "PreviousFields": {
+            "Balance": "34999508",
+            "Sequence": 214
+            },
+            "PreviousTxnID": "81F17A15C3F73F302D2316D65B77131E1DC2FC600D91DEDFA9CA1644E6074D96",
+            "PreviousTxnLgrSeq": 51020347
+        }
+        }
+    ],
+    "DeliveredAmount": "3424",
+    "TransactionIndex": 27,
+    "TransactionResult": "tesSUCCESS",
+    "delivered_amount": "3424"
+    }
+}
