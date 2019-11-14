@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "better-faraday", "~> 1.0.5"
   spec.add_dependency "faraday", "~> 0.15.4"
   spec.add_dependency "memoist", "~> 0.16.0"
-  spec.add_dependency "peatio", "~> 0.6.1"
+  spec.add_dependency "peatio", "~> 0.6.3"
   spec.add_dependency 'net-http-persistent', '~> 3.0.1'
 
   spec.add_development_dependency "bundler", "~> 1.17"
