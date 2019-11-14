@@ -1,0 +1,18 @@
+- id:                     ltc
+  name:                   Litecoin
+  blockchain_key:         ltc-testnet
+  symbol:                 'Ł'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0004488
+  min_collection_amount:  0.0004488
+  withdraw_limit_24h:     0.5
+  withdraw_limit_72h:     1.2
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               5
+  options:                {}
