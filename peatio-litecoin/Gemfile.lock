@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-litecoin (0.2.0)
+    peatio-litecoin (0.2.1.pre.alpha)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
