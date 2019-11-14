@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-ripple (0.1.1)
+    peatio-ripple (0.1.2)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
