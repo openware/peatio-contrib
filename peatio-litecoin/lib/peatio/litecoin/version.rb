@@ -1,5 +1,5 @@
 module Peatio
   module Litecoin
-    VERSION = "0.2.1-alpha".freeze
+    VERSION = "2.4.0"
   end
 end

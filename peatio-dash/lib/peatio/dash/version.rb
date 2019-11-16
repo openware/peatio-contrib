@@ -2,6 +2,6 @@
 
 module Peatio
   module Dash
-    VERSION = "0.1.2"
+    VERSION = "2.4.0"
   end
 end
