@@ -24,7 +24,7 @@ module Peatio
       def create_address!(options = {})
         if options[:address_id].present?
           response = client.rest_api(:get, "/wallet/#{bitgo_wallet_id}/address/#{options[:address_id]}")
-          { address: response['address'] }
+          { address: response['address'], secret: bitgo_wallet_passphrase }
         else
           response = client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/address")
           { address: response['address'], secret: bitgo_wallet_passphrase, details: { address_id: response['id'] }}
@@ -95,23 +95,50 @@ module Peatio
         raise Peatio::Wallet::ClientError, e
       end
 
+      def trigger_webhook_event(event)
+        currency_id = @wallet.fetch(:bitgo_test_net).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
+        return unless currency_id == event['coin'] && @wallet.fetch(:bitgo_wallet_id) == event['wallet']
+
+        if event['type'] == 'transfer'
+          transactions = fetch_transfer!(event['transfer'])
+          return { transfers: transactions }
+        elsif event['address_confirmation']
+          # TODO Add Address confirmation
+        end
+      end
+
       def register_webhooks!(url)
         transfer_webhook(url)
         address_confirmation_webhook(url)
       end
 
       def fetch_transfer!(id)
+        # TODO: Add Rspecs for this one
         response = client.rest_api(:get, "/wallet/#{bitgo_wallet_id}/transfer/#{id}")
-        transaction = Peatio::Transaction.new(
-          currency_id: @currency.fetch(:id),
-          amount: convert_from_base_unit(response['valueString']),
-          hash: response['txid'],
-          to_address: response['entries'].first['address'],
-          block_number: response['height'],
-          # TODO: Add sendmany support
-          txout: 0
-        )
-        transaction if transaction.valid?
+        parse_entries(response['entries']).map do |entry|
+          to_address =  if response.dig('coinSpecific', 'memo').present?
+                          build_address(response.dig('coinSpecific', 'memo').first)
+                        else
+                          entry['address']
+                        end
+          state = if response['state'] == 'unconfrimed'
+                    'pending'
+                  elsif response['state'] == 'confirmed'
+                    'success'
+                  end
+
+          transaction = Peatio::Transaction.new(
+            currency_id: @currency.fetch(:id),
+            amount: convert_from_base_unit(response['valueString']),
+            hash: response['txid'],
+            to_address: to_address,
+            block_number: response['height'],
+            # TODO: Add sendmany support
+            txout: 0,
+            status: state
+          )
+          transaction if transaction.valid?
+        end.compact
       rescue Bitgo::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
@@ -136,6 +163,12 @@ module Peatio
         })
       end
 
+      def parse_entries(entries)
+        entries.map do |e|
+          e if e["valueString"].to_i.positive?
+        end.compact
+      end
+
       private
 
       def client
@@ -146,6 +179,10 @@ module Peatio
         currency_code_prefix = @wallet.fetch(:bitgo_test_net) ? 't' : ''
         uri = uri.gsub(/\/+\z/, '') + '/' + currency_code_prefix + currency_id
         @client ||= Client.new(uri, access_token)
+      end
+
+      def build_address(memo)
+        "#{memo['address']}?memoId=#{memo['value']}"
       end
 
       def bitgo_wallet_passphrase
