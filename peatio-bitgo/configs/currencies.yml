@@ -1,0 +1,140 @@
+- id:                     ltc
+  name:                   Litecoin
+  blockchain_key:         ltc-testnet
+  symbol:                 'Ł'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0004488
+  min_collection_amount:  0.0004488
+  withdraw_limit_24h:     0.5
+  withdraw_limit_72h:     1.2
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               1
+  options:                {}
+
+- id:                     xrp
+  name:                   Ripple
+  blockchain_key:         xrp-testnet
+  symbol:                 'ꭆ'
+  type:                   coin
+  precision:              8
+  base_factor:            1_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0001
+  min_collection_amount:  0.0001
+  withdraw_limit_24h:     100
+  withdraw_limit_72h:     200
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               2
+  options:                {}
+
+- id:                     bch
+  name:                   Bitcoin Cash
+  blockchain_key:         bch-testnet
+  symbol:                 '฿'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0000748
+  min_collection_amount:  0.0000748
+  withdraw_limit_24h:     0.1
+  withdraw_limit_72h:     0.2
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               3
+  options:                {}
+
+- id:                     btc
+  name:                   Bitcoin
+  blockchain_key:         btc-testnet
+  symbol:                 '฿'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  visible:                true
+  deposit_enabled:        true
+  withdrawal_enabled:     true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0000356
+  min_collection_amount:  0.0000356
+  withdraw_limit_24h:     0.1
+  withdraw_limit_72h:     0.2
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               4
+  options:                {}
+
+- id:                     eth
+  name:                   Ethereum
+  blockchain_key:         eth-rinkeby
+  symbol:                 'Ξ'
+  type:                   coin
+  precision:              8
+  base_factor:            1_000_000_000_000_000_000
+  visible:                true
+  deposit_enabled:        true
+  withdrawal_enabled:     true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.00021
+  min_collection_amount:  0.00021
+  withdraw_limit_24h:     0.2
+  withdraw_limit_72h:     0.5
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               5
+  options:
+    # ETH tx fees configurations.
+    #
+    # Maximum amount of gas you're willing to spend on a particular transaction.
+    gas_limit: 21_000
+    # Internal price that is paid for running a transaction on the Ethereum network.
+    gas_price: 1_000_000_000
+
+- id:                     eos
+  name:                   EOS
+  blockchain_key:         eos-testnet
+  symbol:                 'E'
+  type:                   coin
+  precision:              4
+  base_factor:            10_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0001
+  min_collection_amount:  0.0001
+  withdraw_limit_24h:     100.0
+  withdraw_limit_72h:     500.0
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               6
+
+- id:                     dash
+  name:                   Dash
+  blockchain_key:         dash-testnet
+  symbol:                 'D'
+  type:                   coin
+  precision:              8
+  base_factor:            100_000_000
+  enabled:                true
+  # Deposits with less amount are skipped during blockchain synchronization.
+  # We advise to set value 10 times bigger than the network fee to prevent losses.
+  min_deposit_amount:     0.0001
+  min_collection_amount:  0.0001
+  withdraw_limit_24h:     100.0
+  withdraw_limit_72h:     500.0
+  deposit_fee:            0
+  withdraw_fee:           0
+  position:               7
