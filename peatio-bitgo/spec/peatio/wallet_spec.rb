@@ -98,7 +98,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
         it 'requests bitgo client and create address' do
           result = wallet.create_address!(uid: 'UID123', address_id: 'd9c359f727a22320b214afa9184f3')
-          expect(result.symbolize_keys).to eq(address: '2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc')
+          expect(result.symbolize_keys).to eq(address: '2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc', secret: "changeme")
         end
       end
    end

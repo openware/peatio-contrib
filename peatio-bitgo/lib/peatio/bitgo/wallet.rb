@@ -129,14 +129,15 @@ module Peatio
 
           transaction = Peatio::Transaction.new(
             currency_id: @currency.fetch(:id),
-            amount: convert_from_base_unit(response['valueString']),
-            hash: response['txid'],
+            amount: convert_from_base_unit(entry['valueString']),
+            hash: normalize_txid(response['txid']),
             to_address: to_address,
             block_number: response['height'],
             # TODO: Add sendmany support
             txout: 0,
             status: state
           )
+
           transaction if transaction.valid?
         end.compact
       rescue Bitgo::Client::Error => e

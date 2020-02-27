@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-bitgo (1.0.0)
+    peatio-bitgo (1.0.1)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
