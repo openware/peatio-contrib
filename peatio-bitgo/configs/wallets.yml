@@ -13,9 +13,9 @@
     # Geth gateway client settings.
     uri:          http://127.0.0.1:8545
     secret:       'changeme'
-    bitgo_test_net: true
-    bitgo_access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
-    bitgo_wallet_id: '5e5388ad80334347ceb3540c741d'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'
 
 - name:             Ethereum Hot Wallet
   blockchain_key:   eth-rinkeby
@@ -31,9 +31,9 @@
     # Geth gateway client settings.
     uri:          http://127.0.0.1:8545
     secret:       'test'
-    bitgo_test_net: true
-    bitgo_access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
-    bitgo_wallet_id: '5e5388ad80334347ceb3540c741d'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'
 
 - name:             Ethereum Warm Wallet
   blockchain_key:   eth-rinkeby
@@ -49,6 +49,6 @@
     # Geth gateway client settings.
     uri:          http://127.0.0.1:8545
     secret:       'test'
-    bitgo_test_net: true
-    bitgo_access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
-    bitgo_wallet_id: '5e5388ad80334347ceb3540c741d'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'

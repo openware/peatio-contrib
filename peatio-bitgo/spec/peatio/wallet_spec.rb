@@ -3,7 +3,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
   def request_headers(wallet)
     { 'Accept':        'application/json',
-      'Authorization': 'Bearer ' + wallet[:bitgo_access_token] }
+      'Authorization': 'Bearer ' + wallet[:access_token] }
   end
 
   let(:uri) { 'http://127.0.0.1:3080/api/v2' }
@@ -14,9 +14,9 @@ RSpec.describe Peatio::Bitgo::Wallet do
         address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf',
         uri: uri,
         secret: 'changeme',
-        bitgo_access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
-        bitgo_wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
-        bitgo_test_net: true
+        access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+        wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+        testnet: true
       },
       currency: {
         id: 'btc',
@@ -72,7 +72,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         }.to_json
       }
 
-      let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/address' }
+      let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/address' }
 
       it 'requests bitgo client and create address' do
         result = wallet.create_address!(uid: 'UID123')
@@ -94,7 +94,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           }.to_json
         }
 
-        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/address/' + JSON.parse(response_body)["id"] }
+        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/address/' + JSON.parse(response_body)["id"] }
 
         it 'requests bitgo client and create address' do
           result = wallet.create_address!(uid: 'UID123', pa_details: { address_id: 'd9c359f727a22320b214afa9184f3' })
@@ -139,7 +139,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
       }
 
       let(:request_method) { :get }
-      let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] }
+      let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] }
 
       it 'requests bitgo client and get balance' do
         result = wallet.load_balance!
@@ -190,7 +190,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         }
 
         let(:request_method) { :post }
-        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/tx/build' }
+        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/tx/build' }
         let(:transaction) do
           Peatio::Transaction.new(amount: 1.1, to_address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
         end
@@ -247,7 +247,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         }
 
         let(:request_method) { :post }
-        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/tx/build' }
+        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/tx/build' }
 
         let(:transaction) do
           Peatio::Transaction.new(amount: 1.1, to_address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
@@ -317,7 +317,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         }
 
         let(:first_request_method) { :post }
-        let(:first_request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/tx/build' }
+        let(:first_request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/tx/build' }
 
         before do
           stub_request(:post, uri + second_request_path)
@@ -342,7 +342,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           wallet.configure(settings)
         end
 
-        let(:second_request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/sendcoins'}
+        let(:second_request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins'}
 
         let(:second_request_body) { {
           "address": transaction.to_address, "amount": '109998538',
@@ -384,7 +384,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           wallet.configure(settings)
         end
 
-        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/sendcoins'}
+        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins'}
 
         let(:request_body) { {
           "address": transaction.to_address, "amount": '110000000000000',
@@ -409,9 +409,9 @@ RSpec.describe Peatio::Bitgo::Wallet do
           address: '0x2b9fBC10EbAeEc28a8Fc10069C0BC29E45eBEB9C',
           uri: uri,
           secret: 'changeme',
-          bitgo_access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
-          bitgo_wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
-          bitgo_test_net: true
+          access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+          wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+          testnet: true
         },
         currency: {
           id: 'eth',
@@ -443,7 +443,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
       end
 
       let(:request_method) { :post }
-      let(:request_path) { '/teth/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/sendcoins' }
+      let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
 
       before do
         stub_request(:post, uri + request_path)
