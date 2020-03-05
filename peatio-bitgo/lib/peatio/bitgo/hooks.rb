@@ -26,8 +26,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:bitgo] = Bitgo::Blockchain.new
-          Peatio::Wallet.registry[:bitgo] = Bitgo::Wallet.new
+          Peatio::Blockchain.registry[:bitgo] = Bitgo::Blockchain
+          Peatio::Wallet.registry[:bitgo] = Bitgo::Wallet
         end
       end
 

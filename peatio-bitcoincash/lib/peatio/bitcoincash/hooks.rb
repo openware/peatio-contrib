@@ -26,8 +26,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:bitcoincash] = Bitcoincash::Blockchain.new
-          Peatio::Wallet.registry[:bitcoincashd] = Bitcoincash::Wallet.new
+          Peatio::Blockchain.registry[:bitcoincash] = Bitcoincash::Blockchain
+          Peatio::Wallet.registry[:bitcoincashd] = Bitcoincash::Wallet
         end
       end
 

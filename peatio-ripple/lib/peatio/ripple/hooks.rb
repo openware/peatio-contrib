@@ -19,8 +19,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:ripple] = Ripple::Blockchain.new
-          Peatio::Wallet.registry[:rippled] = Ripple::Wallet.new
+          Peatio::Blockchain.registry[:ripple] = Ripple::Blockchain
+          Peatio::Wallet.registry[:rippled] = Ripple::Wallet
         end
       end
 
