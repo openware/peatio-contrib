@@ -28,8 +28,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:dash] = Dash::Blockchain.new
-          Peatio::Wallet.registry[:dashd] = Dash::Wallet.new
+          Peatio::Blockchain.registry[:dash] = Dash::Blockchain
+          Peatio::Wallet.registry[:dashd] = Dash::Wallet
         end
       end
 

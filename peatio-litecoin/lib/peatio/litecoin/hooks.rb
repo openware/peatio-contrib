@@ -26,8 +26,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:litecoin] = Litecoin::Blockchain.new
-          Peatio::Wallet.registry[:litecoind] = Litecoin::Wallet.new
+          Peatio::Blockchain.registry[:litecoin] = Litecoin::Blockchain
+          Peatio::Wallet.registry[:litecoind] = Litecoin::Wallet
         end
       end
 
