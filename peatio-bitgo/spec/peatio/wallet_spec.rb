@@ -97,7 +97,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:bitgo_wallet_id] + '/address/' + JSON.parse(response_body)["id"] }
 
         it 'requests bitgo client and create address' do
-          result = wallet.create_address!(uid: 'UID123', address_id: 'd9c359f727a22320b214afa9184f3')
+          result = wallet.create_address!(uid: 'UID123', pa_details: { address_id: 'd9c359f727a22320b214afa9184f3' })
           expect(result.symbolize_keys).to eq(address: '2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc', secret: "changeme")
         end
       end
@@ -453,7 +453,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
       context 'with substract fee' do
         let(:request_body) { {
-            "address": transaction.to_address, "amount": '1099979000000000000',
+            "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
             "gasPrice": settings[:currency][:options][:gas_price]
           }.to_json

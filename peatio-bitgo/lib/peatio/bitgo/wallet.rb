@@ -22,11 +22,13 @@ module Peatio
       end
 
       def create_address!(options = {})
-        if options[:address_id].present?
-          response = client.rest_api(:get, "/wallet/#{bitgo_wallet_id}/address/#{options[:address_id]}")
+        currency = erc20_currency_id
+        options.deep_symbolize_keys!
+        if options.dig(:pa_details,:address_id).present?
+          response = client.rest_api(:get, "#{currency}/wallet/#{bitgo_wallet_id}/address/#{options.dig(:pa_details, :address_id)}")
           { address: response['address'], secret: bitgo_wallet_passphrase }
         else
-          response = client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/address")
+          response = client.rest_api(:post, "#{currency}/wallet/#{bitgo_wallet_id}/address")
           { address: response['address'], secret: bitgo_wallet_passphrase, details: { address_id: response['id'] }}
         end
       rescue Bitgo::Client::Error => e
@@ -49,7 +51,7 @@ module Peatio
             amount -= fee.to_i
           end
 
-          txid = client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/sendcoins", {
+          txid = client.rest_api(:post, "#{currency_id}/wallet/#{bitgo_wallet_id}/sendcoins", {
                                  address: transaction.to_address.to_s,
                                  amount: amount.to_s,
                                  walletPassphrase: bitgo_wallet_passphrase
@@ -64,7 +66,7 @@ module Peatio
 
 
       def build_raw_transaction(transaction)
-        client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/tx/build", {
+        client.rest_api(:post, "#{currency_id}/wallet/#{bitgo_wallet_id}/tx/build", {
           recipients: [{
             address: transaction.to_address,
             amount: convert_to_base_unit(transaction.amount).to_s
@@ -74,9 +76,8 @@ module Peatio
 
       def create_eth_transaction(transaction, options = {})
         amount = convert_to_base_unit(transaction.amount)
-        amount -= options.fetch(:gas_limit).to_i * options.fetch(:gas_price).to_i if options.dig(:subtract_fee)
 
-        txid = client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/sendcoins", {
+        txid = client.rest_api(:post, "#{currency_id}/wallet/#{bitgo_wallet_id}/sendcoins", {
           address: transaction.to_address.to_s,
           amount: amount.to_s,
           walletPassphrase: bitgo_wallet_passphrase,
@@ -89,8 +90,19 @@ module Peatio
       end
 
       def load_balance!
-        response = client.rest_api(:get, "/wallet/#{bitgo_wallet_id}")
-        convert_from_base_unit(response.fetch('balanceString'))
+        if @currency.fetch(:options).slice(:erc20_contract_address).present?
+          load_erc20_balance!
+        else
+          response = client.rest_api(:get, "#{currency_id}/wallet/#{bitgo_wallet_id}")
+          convert_from_base_unit(response.fetch('balanceString'))
+        end
+      rescue Bitgo::Client::Error => e
+        raise Peatio::Wallet::ClientError, e
+      end
+
+      def load_erc20_balance!
+        response = client.rest_api(:get, "#{erc20_currency_id}/wallet/#{bitgo_wallet_id}?allTokens=true")
+        convert_from_base_unit(response.dig('tokens', currency_id, 'balanceString'))
       rescue Bitgo::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
@@ -114,7 +126,7 @@ module Peatio
 
       def fetch_transfer!(id)
         # TODO: Add Rspecs for this one
-        response = client.rest_api(:get, "/wallet/#{bitgo_wallet_id}/transfer/#{id}")
+        response = client.rest_api(:get, "#{currency_id}/wallet/#{bitgo_wallet_id}/transfer/#{id}")
         parse_entries(response['entries']).map do |entry|
           to_address =  if response.dig('coinSpecific', 'memo').present?
                           build_address(response.dig('coinSpecific', 'memo').first)
@@ -145,7 +157,7 @@ module Peatio
       end
 
       def transfer_webhook(url)
-        client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/webhooks", {
+        client.rest_api(:post, "#{currency_id}/wallet/#{bitgo_wallet_id}/webhooks", {
           type: 'transfer',
           allToken: true,
           url: url,
@@ -155,7 +167,7 @@ module Peatio
       end
 
       def address_confirmation_webhook(url)
-        client.rest_api(:post, "/wallet/#{bitgo_wallet_id}/webhooks", {
+        client.rest_api(:post, "#{currency_id}/wallet/#{bitgo_wallet_id}/webhooks", {
           type: 'address_confirmation_webhook',
           allToken: true,
           url: url,
@@ -173,17 +185,28 @@ module Peatio
       private
 
       def client
-        currency_id = @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
         uri = @wallet.fetch(:uri) { raise Peatio::Wallet::MissingSettingError, :uri }
         access_token = @wallet.fetch(:bitgo_access_token) { raise Peatio::Wallet::MissingSettingError, :bitgo_access_token }
 
         currency_code_prefix = @wallet.fetch(:bitgo_test_net) ? 't' : ''
-        uri = uri.gsub(/\/+\z/, '') + '/' + currency_code_prefix + currency_id
+        uri = uri.gsub(/\/+\z/, '') + '/' + currency_code_prefix
         @client ||= Client.new(uri, access_token)
       end
 
       def build_address(memo)
         "#{memo['address']}?memoId=#{memo['value']}"
+      end
+
+      # All these functions will have to be done with the coin set to eth or teth
+      # since that is the actual coin type being used.
+      def erc20_currency_id
+        return 'eth' if @currency.fetch(:options).slice(:erc20_contract_address).present?
+
+        currency_id
+      end
+
+      def currency_id
+        @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
       end
 
       def bitgo_wallet_passphrase
