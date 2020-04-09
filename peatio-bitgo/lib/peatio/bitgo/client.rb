@@ -43,7 +43,11 @@ module Peatio
         response['error'].tap { |error| raise ResponseError.new(error) if error }
         response
       rescue Faraday::Error => e
-        raise ConnectionError, e
+        if e.is_a?(Faraday::ConnectionFailed) || e.is_a?(Faraday::TimeoutError)
+          raise ConnectionError, e
+        else
+          raise ConnectionError, JSON.parse(e.response.body)['message']
+        end
       rescue StandardError => e
         raise Error, e
       end

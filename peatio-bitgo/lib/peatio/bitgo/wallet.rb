@@ -54,7 +54,8 @@ module Peatio
           txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
                                  address: transaction.to_address.to_s,
                                  amount: amount.to_s,
-                                 walletPassphrase: bitgo_wallet_passphrase
+                                 walletPassphrase: bitgo_wallet_passphrase,
+                                 memo: xlm_memo(transaction.to_address.to_s)
           }.compact).fetch('txid')
 
           transaction.hash = normalize_txid(txid)
@@ -129,15 +130,13 @@ module Peatio
         response = client.rest_api(:get, "#{currency_id}/wallet/#{wallet_id}/transfer/#{id}")
         parse_entries(response['entries']).map do |entry|
           to_address =  if response.dig('coinSpecific', 'memo').present?
-                          build_address(response.dig('coinSpecific', 'memo').first)
+                          memo = response.dig('coinSpecific', 'memo')
+                          memo_type = memo.kind_of?(Array) ? memo.first  : memo
+                          build_address(entry['address'], memo_type)
                         else
                           entry['address']
                         end
-          state = if response['state'] == 'unconfrimed'
-                    'pending'
-                  elsif response['state'] == 'confirmed'
-                    'success'
-                  end
+          state = define_transaction_state(response['state'])
 
           transaction = Peatio::Transaction.new(
             currency_id: @currency.fetch(:id),
@@ -193,8 +192,8 @@ module Peatio
         @client ||= Client.new(uri, access_token)
       end
 
-      def build_address(memo)
-        "#{memo['address']}?memoId=#{memo['value']}"
+      def build_address(address, memo)
+        "#{address}?memoId=#{memo['value']}"
       end
 
       # All these functions will have to be done with the coin set to eth or teth
@@ -203,6 +202,22 @@ module Peatio
         return 'eth' if @currency.fetch(:options).slice(:erc20_contract_address).present?
 
         currency_id
+      end
+
+      def xlm_memo(address)
+        if @currency.fetch(:id) == 'xlm'
+            {
+              type: "id",
+              value: "#{memo_id_from(address)}"
+            }
+        end
+      end
+
+      def memo_id_from(address)
+        memo_id = address.partition('memoId=').last
+        memo_id = 0 if memo_id.empty?
+
+        memo_id
       end
 
       def currency_id
@@ -233,6 +248,17 @@ module Peatio
                 "#{value.to_d} - #{x.to_d} must be equal to zero."
         end
         x.to_i
+      end
+
+      def define_transaction_state(state)
+        case state
+        when 'unconfrimed'
+          'pending'
+        when 'confirmed'
+          'success'
+        when 'failed','rejected'
+          'failed'
+        end
       end
     end
   end
