@@ -28,6 +28,7 @@ RSpec.describe Peatio::Bitgo::Client do
       {
         "error": "string",
         "requestId": "string",
+        "message": "message",
         "context": {
           "id": "585951a5df8380e0e3063e9f12345678"
         },
@@ -63,7 +64,7 @@ RSpec.describe Peatio::Bitgo::Client do
 
   context :connectionerror do
     before do
-      Faraday::Connection.any_instance.expects(:post).raises(Faraday::Error).once
+      Faraday::Connection.any_instance.expects(:post).raises(Faraday::TimeoutError).once
     end
 
     it do
