@@ -465,7 +465,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
       }.to_json
       }
 
-      it 'creates eth transaction' do
+      it 'creates xlm transaction' do
         result = wallet.create_transaction!(transaction)
         expect(result.amount).to eq(1.1)
         expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf?memoId=2')
@@ -528,7 +528,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         let(:request_body) { {
             "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-            "gasPrice": settings[:currency][:options][:gas_price]
+            "gasPrice": settings[:currency][:options][:gas_price], hop: true
           }.to_json
         }
 
@@ -545,7 +545,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         let(:request_body) { {
           "address": transaction.to_address, "amount": '1100000000000000000',
           "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-          "gasPrice": settings[:currency][:options][:gas_price]
+          "gasPrice": settings[:currency][:options][:gas_price], hop: true
         }.to_json
         }
 
