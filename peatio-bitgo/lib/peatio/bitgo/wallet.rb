@@ -83,7 +83,8 @@ module Peatio
           amount: amount.to_s,
           walletPassphrase: bitgo_wallet_passphrase,
           gas: options.fetch(:gas_limit).to_i,
-          gasPrice: options.fetch(:gas_price).to_i
+          gasPrice: options.fetch(:gas_price).to_i,
+          hop: true
         }.compact).fetch('txid')
 
         transaction.hash = normalize_txid(txid)
