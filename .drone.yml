@@ -8,6 +8,20 @@ steps:
     commands:
       - make test
 
+  - name: Release gems
+    image: ruby:2.6
+    environment:
+      GEM_CREDENTIALS:
+        from_secret: gem_credentials
+    commands:
+      - mkdir -p ~/.gem
+      - echo $GEM_CREDENTIALS | base64 -d > ~/.gem/credentials
+      - chmod 0600 ~/.gem/credentials
+      - make release
+    when:
+      branch:
+        - master
+
 trigger:
   event:
     - push

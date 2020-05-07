@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /bin/bash -x
 
 test:
 	for i in peatio-*; do \
@@ -11,7 +11,10 @@ test:
 release:
 	for i in peatio-*; do \
 	  pushd $$i; \
+		git status; \
+		rm -f *.gem; \
 		bundle install; \
-	  bundle exec rake release || exit $$?; \
+		gem build *.gemspec && \
+		gem push *.gem; \
 	  popd; \
 	done
