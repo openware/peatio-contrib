@@ -1,6 +1,6 @@
-# Peatio Electrum Blockchain Plugin
+# Peatio plugin for Electrum wallet
 
-This gem is a [peatio](https://github.com/openware/peatio) plugin adding the support of Electrum blockchain.
+This gem is a [peatio](https://github.com/openware/peatio) plugin adding the support of Electrum server to manage wallets.
 
 ## Installation
 

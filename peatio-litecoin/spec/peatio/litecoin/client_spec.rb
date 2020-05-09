@@ -75,7 +75,7 @@ RSpec.describe Peatio::Litecoin::Client do
 
     context :connectionerror do
       before do
-        Faraday::Connection.any_instance.expects(:post).raises(Faraday::Error).once
+        Faraday::Connection.any_instance.expects(:post).raises(Faraday::Error.new("Something went wrong")).once
       end
 
       it do

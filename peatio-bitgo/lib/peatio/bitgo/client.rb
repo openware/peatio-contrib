@@ -5,7 +5,7 @@ module Peatio
   module Bitgo
     class Client
       Error = Class.new(StandardError)
-      class ConnectionError < Error; end
+      ConnectionError = Class.new(Error)
 
       class ResponseError < Error
         def initialize(msg)
@@ -48,8 +48,6 @@ module Peatio
         else
           raise ConnectionError, JSON.parse(e.response.body)['message']
         end
-      rescue StandardError => e
-        raise Error, e
       end
     end
   end

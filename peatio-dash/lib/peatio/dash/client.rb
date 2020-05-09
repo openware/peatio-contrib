@@ -8,7 +8,7 @@ module Peatio
   module Dash
     class Client
       Error = Class.new(StandardError)
-      class ConnectionError < Error; end
+      ConnectionError = Class.new(Error)
 
       class ResponseError < Error
         def initialize(code, msg)
@@ -38,15 +38,8 @@ module Peatio
         end
 
         response.fetch("result")
-      rescue StandardError => e
-        case e
-        when Faraday::Error
-          raise ConnectionError, e
-        when Error
-          raise e
-        else
-          raise Error, e
-        end
+      rescue Faraday::Error => e
+        raise ConnectionError, e
       end
 
       private
