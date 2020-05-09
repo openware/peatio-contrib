@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'memoist'
 require 'faraday'
 require 'better-faraday'
@@ -6,7 +8,7 @@ module Peatio
   module Bitcoincash
     class Client
       Error = Class.new(StandardError)
-      class ConnectionError < Error; end
+      ConnectionError = Class.new(Error)
 
       class ResponseError < Error
         def initialize(code, msg)
@@ -29,20 +31,16 @@ module Peatio
         response = connection.post \
           '/',
           { jsonrpc: '1.0', method: method, params: params }.to_json,
-          { 'Accept'       => 'application/json',
+          { 'Accept' => 'application/json',
             'Content-Type' => 'application/json' }
         response.assert_2xx!
         response = JSON.parse(response.body)
-        response['error'].tap { |e| raise ResponseError.new(e['code'], e['message']) if e }
-        response.fetch('result')
-      rescue => e
-        if e.is_a?(Error)
-          raise e
-        elsif e.is_a?(Faraday::Error)
-          raise ConnectionError, e
-        else
-          raise Error, e
+        response['error'].tap do |e|
+          raise ResponseError.new(e['code'], e['message']) if e
         end
+        response.fetch('result')
+      rescue Faraday::Error => e
+        raise ConnectionError, e
       end
 
       private

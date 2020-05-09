@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Camille Meulien"]
   spec.email         = ["cmeulien@heliostech.fr"]
 
-  spec.summary       = "Peatio Electrum Blockchain Plugin"
-  spec.description   = "Peatio Electrum Blockchain Plugin"
+  spec.summary       = "Peatio Plugin for Electrum server"
+  spec.description   = "Peatio Plugin for Electrum server"
   spec.homepage      = "https://www.openware.com"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -34,10 +34,16 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) {|f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "activesupport", "~> 5.2.3"
+  spec.add_dependency "faraday", "~> 0.17"
+
+  spec.add_dependency "peatio", ">= 0.6.3"
+  spec.add_dependency 'net-http-persistent', '~> 3.0.1'
+
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "byebug"
   spec.add_development_dependency "irb"
-  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rubocop-github"
+  spec.add_development_dependency "webmock", "~> 3.5"
   spec.add_development_dependency "simplecov"
 end

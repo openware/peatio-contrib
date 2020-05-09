@@ -6,6 +6,7 @@ module Peatio::Electrum
   # https://github.com/openware/peatio-core/blob/master/lib/peatio/wallet/abstract.rb
   #
   class Wallet < Peatio::Wallet::Abstract
+    attr_reader :client
 
     def initialize(settings = {})
       @settings = settings
@@ -28,8 +29,6 @@ module Peatio::Electrum
     #       Clean everything what could be related to other wallet configuration.
     #       E.g. client state.
     def configure(settings = {})
-      # Clean client state during configure.
-      @client = nil
       @settings.merge!(settings.slice(*SUPPORTED_SETTINGS))
 
       @wallet = @settings.fetch(:wallet) do
@@ -39,6 +38,12 @@ module Peatio::Electrum
       @currency = @settings.fetch(:currency) do
         raise Peatio::Wallet::MissingSettingError, :currency
       end.slice(:id, :base_factor, :options)
+
+      unless @settings[:wallet][:uri]
+        raise Peatio::Wallet::MissingSettingError, 'Missing uri in wallet'
+      end
+
+      @client = Client.new(@settings[:wallet][:uri])
     end
 
     # Performs API call for address creation and returns it.
@@ -48,15 +53,19 @@ module Peatio::Electrum
     #
     # @return [Hash] newly created blockchain address.
     #
-    # @raise [Peatio::Blockchain::ClientError] if error was raised
+    # @raise [Peatio::Wallet::ClientError] if error was raised
     #   on wallet API call.
     #
     # @example
     #   { address: :fake_address,
     #     secret:  :changeme,
     #     details: { uid: account.member.uid } }
-    def create_address!(options = {})
-      method_not_implemented
+    def create_address!(_options = {})
+      {
+        address: client.create_address
+      }
+    rescue Peatio::Electrum::Client::Error => e
+      raise Peatio::Wallet::ClientError, e
     end
 
     # Performs API call for creating transaction and returns updated transaction.
@@ -77,10 +86,15 @@ module Peatio::Electrum
     #
     # @return [Peatio::Transaction] transaction with updated hash.
     #
-    # @raise [Peatio::Blockchain::ClientError] if error was raised
+    # @raise [Peatio::Wallet::ClientError] if error was raised
     #   on wallet API call.
-    def create_transaction!(transaction, options = {})
-      method_not_implemented
+    def create_transaction!(transaction, _options = {})
+      tx = client.payto(transaction.to_address, transaction.amount)['hex']
+      txid = client.broadcast(tx)
+      transaction.hash = txid
+      transaction
+    rescue Peatio::Electrum::Client::Error => e
+      raise Peatio::Wallet::ClientError, e
     end
 
     # Fetches address balance of specific currency.
@@ -90,33 +104,14 @@ module Peatio::Electrum
     #
     # @return [BigDecimal] the current address balance.
     #
-    # @raise [Peatio::Blockchain::ClientError,Peatio::Blockchain::UnavailableAddressBalanceError]
+    # @raise [Peatio::Wallet::ClientError]
     # if error was raised on wallet API call ClientError is raised.
     # if wallet API call was successful but we can't detect balance
     # for address Error is raised.
     def load_balance!
-      raise Peatio::Wallet::UnavailableAddressBalanceError
-    end
-
-    # Performs API call(s) for preparing for deposit collection.
-    # E.g deposits ETH for collecting ERC20 tokens in case of Ethereum blockchain.
-    #
-    # @note Optional. Override this method only if you need additional step
-    # before deposit collection.
-    #
-    # @param [Peatio::Transaction] deposit_transaction transaction which
-    # describes received deposit.
-    #
-    # @param [Array<Peatio::Transaction>] spread_transactions result of deposit
-    # spread between wallets.
-    #
-    # @return [Array<Peatio::Transaction>] transaction created for
-    # deposit collection preparing.
-    # By default return empty [Array]
-    def prepare_deposit_collection!(deposit_transaction, spread_transactions, deposit_currency)
-      # This method is mostly used for coins which needs additional fees
-      # to be deposited before deposit collection.
-      []
+      client.get_balance
+    rescue Peatio::Electrum::Client::Error => e
+      raise Peatio::Wallet::ClientError, e
     end
 
   end

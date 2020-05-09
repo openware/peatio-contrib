@@ -6,7 +6,7 @@ module Peatio
   module Ripple
     class Client
       Error = Class.new(StandardError)
-      class ConnectionError < Error; end
+      ConnectionError = Class.new(Error)
 
       class ResponseError < Error
         def initialize(code, msg)
@@ -38,14 +38,8 @@ module Peatio
           raise ResponseError.new(result['error_code'], result['error_message']) if result['status'] == 'error'
         end
         response.fetch('result')
-      rescue => e
-        if e.is_a?(Error)
-          raise e, e.message
-        elsif e.is_a?(Faraday::Error)
-          raise ConnectionError, e
-        else
-          raise Error, e
-        end
+      rescue Faraday::Error => e
+        raise ConnectionError, e
       end
 
       private

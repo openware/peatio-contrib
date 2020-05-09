@@ -10,13 +10,6 @@ RSpec.describe Peatio::Bitgo::Client do
     it { expect{ subject }.not_to raise_error }
   end
 
-  context :undefined_method do
-    it do
-      expect { subject.rest_api(:undefined_method, '') }.to \
-               raise_error(Peatio::Bitgo::Client::Error)
-    end
-  end
-
   context :invalid_wallet_id do
     before do
       stub_request(:post, uri)
