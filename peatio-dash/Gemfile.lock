@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-dash (2.5.1)
+    peatio-dash (2.5.2)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
@@ -21,7 +21,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    amq-protocol (2.3.0)
+    amq-protocol (2.3.1)
     amqp (1.8.0)
       amq-protocol (>= 2.2.0)
       eventmachine
@@ -29,8 +29,8 @@ GEM
     better-faraday (1.0.8)
       activesupport (>= 4.0, < 6.0)
       faraday (~> 0.12)
-    bunny (2.14.4)
-      amq-protocol (~> 2.3, >= 2.3.0)
+    bunny (2.15.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
     byebug (11.1.1)
     clamp (1.3.1)
     coderay (1.1.2)
@@ -92,7 +92,7 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.5)
       ast (~> 2.4.0)
-    peatio (2.4.3)
+    peatio (2.4.4)
       activemodel (> 5.2, <= 6.0.0)
       amqp
       bunny
@@ -154,7 +154,7 @@ GEM
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
     thread_safe (0.3.6)
-    tzinfo (1.2.6)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.6.1)
     webmock (3.8.3)
