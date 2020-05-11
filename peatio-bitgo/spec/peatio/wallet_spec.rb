@@ -475,6 +475,72 @@ RSpec.describe Peatio::Bitgo::Wallet do
     end
   end
 
+  context 'create erc20 transaction' do
+    let(:settings) do
+      {
+        wallet: {
+          address: '0x2b9fBC10EbAeEc28a8Fc10069C0BC29E45eBEB9C',
+          uri: uri,
+          secret: 'changeme',
+          access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+          wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+          testnet: true
+        },
+        currency: {
+          id: 'eth',
+          base_factor: 1_000_000_000_000_000_000,
+          code: 'eth',
+          options: {
+            gas_limit: 21_000,
+            gas_price: 1_000_000_000,
+            erc20_contract_address: ''
+          }
+        }
+      }
+      end
+
+      let(:response_body) {
+        {
+          "transfer": {},
+          "txid": "x123123483791e27387sd945384554ui34jw",
+          "tx": "a234343234",
+          "status": "signed"
+        }.to_json
+      }
+
+      before do
+        wallet.configure(settings)
+      end
+
+      let(:transaction) do
+        Peatio::Transaction.new(amount: 1.1, to_address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
+      end
+
+      let(:request_method) { :post }
+      let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
+
+      before do
+        stub_request(:post, uri + request_path)
+        .with(body: request_body, headers: request_headers(settings[:wallet]))
+        .to_return(status: 200, body: response_body)
+      end
+
+      let(:request_body) { {
+          "address": transaction.to_address, "amount": '1100000000000000000',
+          "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
+          "gasPrice": settings[:currency][:options][:gas_price]
+        }.to_json
+      }
+
+      it 'creates erc20 transaction' do
+        result = wallet.create_transaction!(transaction, subtract_fee: true)
+        expect(result.amount).to eq(1.1)
+        expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
+        expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
+        expect(result.status).to eq('pending')
+      end
+  end
+
   context 'create eth transaction' do
       let(:settings) do
       {

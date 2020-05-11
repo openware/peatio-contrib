@@ -36,7 +36,7 @@ module Peatio
       end
 
       def create_transaction!(transaction, options = {})
-        currency_options = @currency.fetch(:options).slice(:gas_limit, :gas_price)
+        currency_options = @currency.fetch(:options).slice(:gas_limit, :gas_price, :erc20_contract_address)
 
         if currency_options[:gas_limit].present? && currency_options[:gas_price].present?
           options.merge!(currency_options)
@@ -77,6 +77,7 @@ module Peatio
 
       def create_eth_transaction(transaction, options = {})
         amount = convert_to_base_unit(transaction.amount)
+        hop = true unless options.slice(:erc20_contract_address).present?
 
         txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
           address: transaction.to_address.to_s,
@@ -84,7 +85,7 @@ module Peatio
           walletPassphrase: bitgo_wallet_passphrase,
           gas: options.fetch(:gas_limit).to_i,
           gasPrice: options.fetch(:gas_price).to_i,
-          hop: true
+          hop: hop
         }.compact).fetch('txid')
 
         transaction.hash = normalize_txid(txid)
