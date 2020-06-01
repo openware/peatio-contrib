@@ -82,23 +82,32 @@ RSpec.describe Peatio::Bitgo::Wallet do
       end
 
       context 'address_id option is provided' do
-        before do
-          stub_request(:get, uri + request_path)
-          .with(body: {}, headers: request_headers(settings[:wallet]))
-          .to_return(status: 200, body: response_body)
+        context 'updated at greater or equal to  1m from Time now' do
+          before do
+            stub_request(:get, uri + request_path)
+            .with(body: {}, headers: request_headers(settings[:wallet]))
+            .to_return(status: 200, body: response_body)
+          end
+
+          let(:response_body) {
+            { address: "2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc", secret: settings[:wallet][:secret],
+              id: 'd9c359f727a22320b214afa9184f3'
+            }.to_json
+          }
+
+          let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/address/' + JSON.parse(response_body)["id"] }
+
+          it 'requests bitgo client and create address' do
+            result = wallet.create_address!(uid: 'UID123', pa_details: { address_id: 'd9c359f727a22320b214afa9184f3', updated_at: Time.now - 10*60 })
+            expect(result.symbolize_keys).to eq(address: '2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc', secret: "changeme")
+          end
         end
 
-        let(:response_body) {
-          { address: "2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc", secret: settings[:wallet][:secret],
-            id: 'd9c359f727a22320b214afa9184f3'
-          }.to_json
-        }
-
-        let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/address/' + JSON.parse(response_body)["id"] }
-
-        it 'requests bitgo client and create address' do
-          result = wallet.create_address!(uid: 'UID123', pa_details: { address_id: 'd9c359f727a22320b214afa9184f3' })
-          expect(result.symbolize_keys).to eq(address: '2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc', secret: "changeme")
+        context 'updated at less than 1m from Time now' do
+          it 'requests bitgo client and create address' do
+            result = wallet.create_address!(uid: 'UID123', pa_details: { address_id: 'd9c359f727a22320b214afa9184f3', updated_at: Time.now })
+            expect(result).to eq nil
+          end
         end
       end
    end
@@ -623,6 +632,37 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.status).to eq('pending')
         end
       end
+    end
+  end
+
+  context 'fetch_address_id' do
+    around do |example|
+      WebMock.disable_net_connect!
+      example.run
+      WebMock.allow_net_connect!
+    end
+
+    before do
+      wallet.configure(settings)
+    end
+
+    before do
+      stub_request(:get, uri + request_path)
+      .with(body: {}, headers: request_headers(settings[:wallet]))
+      .to_return(status: 200, body: response_body)
+    end
+
+    let(:response_body) {
+      { address: "2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc",
+        id: 'd9c359f727a22320b214afa9184f3'
+      }.to_json
+    }
+
+    let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/address/' + JSON.parse(response_body)["address"] }
+
+    it 'requests bitgo client and create address' do
+      result = wallet.fetch_address_id('2MySruptM4SgZF49KSc3x5KyxAW61ghyvtc')
+      expect(result).to eq("d9c359f727a22320b214afa9184f3")
     end
   end
 end
