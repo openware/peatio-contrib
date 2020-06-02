@@ -22,7 +22,7 @@ module Peatio
         args = [@endpoint.to_s + path]
 
         if data
-          if %i[ post put patch ].include?(verb)
+          if %i[post put patch].include?(verb)
             args << data.compact.to_json
             args << { 'Content-Type' => 'application/json' }
           else

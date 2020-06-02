@@ -9,7 +9,7 @@ module Peatio
           unless Gem::Requirement.new(BLOCKCHAIN_VERSION_REQUIREMENT)
                                  .satisfied_by?(Gem::Version.new(Peatio::Blockchain::VERSION))
             [
-              "Bitgo blockchain version requiremnt was not suttisfied by Peatio::Blockchain.",
+              "Bitgo blockchain version requirement was not satisfied by Peatio::Blockchain.",
               "Bitgo blockchain requires #{BLOCKCHAIN_VERSION_REQUIREMENT}.",
               "Peatio::Blockchain version is #{Peatio::Blockchain::VERSION}"
             ].join('\n').tap { |s| Kernel.abort s }
@@ -18,7 +18,7 @@ module Peatio
           unless Gem::Requirement.new(WALLET_VERSION_REQUIREMENT)
                                  .satisfied_by?(Gem::Version.new(Peatio::Wallet::VERSION))
             [
-              "Bitgo wallet version requiremnt was not suttisfied by Peatio::Wallet.",
+              "Bitgo wallet version requirement was not satisfied by Peatio::Wallet.",
               "Bitgo wallet requires #{WALLET_VERSION_REQUIREMENT}.",
               "Peatio::Wallet version is #{Peatio::Wallet::VERSION}"
             ].join('\n').tap { |s| Kernel.abort s }

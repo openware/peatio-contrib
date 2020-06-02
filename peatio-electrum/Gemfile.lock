@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-electrum (0.1.0)
+    peatio-electrum (2.6.1)
       activesupport (~> 5.2.3)
       faraday (~> 0.17)
       net-http-persistent (~> 3.0.1)
@@ -10,9 +10,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.2.4.2)
-      activesupport (= 5.2.4.2)
-    activesupport (5.2.4.2)
+    activemodel (5.2.4.3)
+      activesupport (= 5.2.4.3)
+    activesupport (5.2.4.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -35,7 +35,7 @@ GEM
     daemons (1.3.1)
     diff-lcs (1.3)
     docile (1.3.2)
-    em-http-request (1.1.5)
+    em-http-request (1.1.6)
       addressable (>= 2.3.4)
       cookiejar (!= 0.3.1)
       em-socksify (>= 0.3)
@@ -72,7 +72,7 @@ GEM
     irb (1.2.4)
       reline (>= 0.0.1)
     jwt (2.2.1)
-    minitest (5.14.0)
+    minitest (5.14.1)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
@@ -126,7 +126,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket-driver (0.7.1)
+    websocket-driver (0.7.2)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
 

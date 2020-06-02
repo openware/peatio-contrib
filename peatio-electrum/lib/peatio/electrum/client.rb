@@ -82,8 +82,20 @@ module Peatio::Electrum
       JSON.parse(call('history', [year, show_addresses, show_fiat, show_fees, from_height, to_height]))
     end
 
-    def payto(destination, amount, fee = nil, from_addr = nil, change_addr = nil, nocheck = false, unsigned = false, rbf = nil, password = nil, locktime = nil)
-      call('payto', [destination, amount, fee, from_addr, change_addr, nocheck, unsigned, rbf, password, locktime])
+    ## Default options:
+    ## fee: nil
+    ## from_addr: nil
+    ## change_addr: nil
+    ## nocheck: false
+    ## unsigned: false
+    ## rbf: nil
+    ## password: nil
+    ## locktime: nil
+    def payto(destination, amount, opts = {})
+      call('payto', {
+        destination: destination,
+        amount: amount
+      }.merge(opts).compact)
     end
 
     def broadcast(tx)

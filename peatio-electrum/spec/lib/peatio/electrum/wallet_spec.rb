@@ -7,7 +7,8 @@ describe Peatio::Electrum::Wallet do
     {
       wallet: {
         address: 'something',
-        uri: uri
+        uri: uri,
+        secret: 'pw0'
       },
       currency: {
         id: :btc,
