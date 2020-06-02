@@ -51,7 +51,11 @@ shared_context 'mocked electrum server' do
       .to_return(status: 200, body: '{"result": {"hex": "0200000000010164f7378b25287544fd08107c569b3ed6c98801b6bda1f2e9982072cde4f64b8f0100000017160014e26a9cb4accfa5d0ed0195b1a2e2693aa72b3875feffffff02ddbf0f000000000017a914909da0fbb7c1d0947181e2fc9b7e11a2052c150387a0860100000000001976a914adb8354c90d2a5c50bf5b6c786618bc9d1d5f66588ac02473044022035b4e88ff0d5b41d842ddf75a707e2e5e081b445ec6103038a8c4315f7848bfa02201f6182de6d4c40d925f3063e462f5e694b9f52d7103d39365985e95536dcf991012103f600b692c1170c8cf46aeae0c60a3d80447e8e70a0281c56a21aa7097abbd460fe4b1a00", "complete": true, "final": true}, "id": 42, "error": null}', headers: auth_headers)
 
     stub_request(:post, 'http://127.0.0.1:7000')
-      .with(body: '{"id":42,"method":"payto","params":["mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt",0.001,null,null,null,false,false,null,null,null]}')
+      .with(body: '{"id":42,"method":"payto","params":{"destination":"mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt","amount":0.001}}')
+      .to_return(status: 200, body: '{"result": {"hex": "0200000001273acbb62e78c799f53f0dc975c72d819b16590ddd9384ca13f7e6a78e0a84a6000000006b483045022100dc701ee09e0851c62ab8bccf4bd803d2aeef2a2c53d18e082b6cb1658ba1ccdb022003f1cdfca0d1f3019a9ba5fdbdae9e037a81e55dfd9cbe2d92ffbe4123faf85c0121031e80dfe90863c16369970daab2cbdcd9e458323cab63e5fba8ccb8a64c8dc672fdffffff02a0860100000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688acbeba0d00000000001976a914de832435d134b2119b2fdeb2cb80b20d9a805a6088acc94c1a00", "complete": true, "final": false}, "id": 42, "error": null}', headers: auth_headers)
+
+    stub_request(:post, 'http://127.0.0.1:7000')
+      .with(body: '{"id":42,"method":"payto","params":{"destination":"mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt","amount":0.001,"password":"pw0"}}')
       .to_return(status: 200, body: '{"result": {"hex": "0200000001273acbb62e78c799f53f0dc975c72d819b16590ddd9384ca13f7e6a78e0a84a6000000006b483045022100dc701ee09e0851c62ab8bccf4bd803d2aeef2a2c53d18e082b6cb1658ba1ccdb022003f1cdfca0d1f3019a9ba5fdbdae9e037a81e55dfd9cbe2d92ffbe4123faf85c0121031e80dfe90863c16369970daab2cbdcd9e458323cab63e5fba8ccb8a64c8dc672fdffffff02a0860100000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688acbeba0d00000000001976a914de832435d134b2119b2fdeb2cb80b20d9a805a6088acc94c1a00", "complete": true, "final": false}, "id": 42, "error": null}', headers: auth_headers)
 
     stub_request(:post, 'http://127.0.0.1:7000')

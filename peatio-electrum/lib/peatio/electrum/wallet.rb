@@ -89,7 +89,7 @@ module Peatio::Electrum
     # @raise [Peatio::Wallet::ClientError] if error was raised
     #   on wallet API call.
     def create_transaction!(transaction, _options = {})
-      tx = client.payto(transaction.to_address, transaction.amount)['hex']
+      tx = client.payto(transaction.to_address, transaction.amount, password: @settings[:wallet][:secret])['hex']
       txid = client.broadcast(tx)
       transaction.hash = txid
       transaction
