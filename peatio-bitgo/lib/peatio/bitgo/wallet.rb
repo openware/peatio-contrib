@@ -116,15 +116,15 @@ module Peatio
       end
 
       def trigger_webhook_event(event)
-        currency_id = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
-        return unless currency_id == event['coin'] && @wallet.fetch(:wallet_id) == event['wallet']
+        currency = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
+        return unless currency == event['coin'] && @wallet.fetch(:wallet_id) == event['wallet']
 
         if event['type'] == 'transfer'
           transactions = fetch_transfer!(event['transfer'])
           return { transfers: transactions }
         elsif event['type'] == 'address_confirmation'
           address_id = fetch_address_id(event['address'])
-          return { address_id: address_id}
+          return { address_id: address_id, currency_id: currency_id }
         end
       end
 
