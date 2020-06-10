@@ -1,6 +1,7 @@
 module Peatio
   module Bitgo
     class Wallet < Peatio::Wallet::Abstract
+      TIME_DIFFERENCE_IN_MINUTES = 10
 
       def initialize(settings = {})
         @settings = settings
@@ -24,10 +25,14 @@ module Peatio
       def create_address!(options = {})
         currency = erc20_currency_id
         options.deep_symbolize_keys!
-        if options.dig(:pa_details,:address_id).present?
+
+        if options.dig(:pa_details, :address_id).present? &&
+           options.dig(:pa_details, :updated_at).present? &&
+           time_difference_in_minutes(options.dig(:pa_details, :updated_at)) >= TIME_DIFFERENCE_IN_MINUTES
+
           response = client.rest_api(:get, "#{currency}/wallet/#{wallet_id}/address/#{options.dig(:pa_details, :address_id)}")
           { address: response['address'], secret: bitgo_wallet_passphrase }
-        else
+        elsif options.dig(:pa_details, :address_id).blank?
           response = client.rest_api(:post, "#{currency}/wallet/#{wallet_id}/address")
           { address: response['address'], secret: bitgo_wallet_passphrase, details: { address_id: response['id'] }}
         end
@@ -111,20 +116,29 @@ module Peatio
       end
 
       def trigger_webhook_event(event)
-        currency_id = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
-        return unless currency_id == event['coin'] && @wallet.fetch(:wallet_id) == event['wallet']
+        currency = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
+        return unless currency == event['coin'] && @wallet.fetch(:wallet_id) == event['wallet']
 
         if event['type'] == 'transfer'
           transactions = fetch_transfer!(event['transfer'])
           return { transfers: transactions }
-        elsif event['address_confirmation']
-          # TODO Add Address confirmation
+        elsif event['type'] == 'address_confirmation'
+          address_id = fetch_address_id(event['address'])
+          return { address_id: address_id, currency_id: currency_id }
         end
       end
 
       def register_webhooks!(url)
         transfer_webhook(url)
         address_confirmation_webhook(url)
+      end
+
+      def fetch_address_id(address)
+        currency = erc20_currency_id
+        client.rest_api(:get, "#{currency}/wallet/#{wallet_id}/address/#{address}")
+              .fetch('id')
+      rescue Bitgo::Client::Error => e
+        raise Peatio::Wallet::ClientError, e
       end
 
       def fetch_transfer!(id)
@@ -169,7 +183,7 @@ module Peatio
 
       def address_confirmation_webhook(url)
         client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/webhooks", {
-          type: 'address_confirmation_webhook',
+          type: 'address_confirmation',
           allToken: true,
           url: url,
           label: "webhook for #{url}",
@@ -252,9 +266,13 @@ module Peatio
         x.to_i
       end
 
+      def time_difference_in_minutes(updated_at)
+        (Time.now - updated_at)/60
+      end
+
       def define_transaction_state(state)
         case state
-        when 'unconfrimed'
+        when 'unconfirmed'
           'pending'
         when 'confirmed'
           'success'
