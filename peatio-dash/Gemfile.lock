@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     peatio-dash (2.5.2)
-      activesupport (~> 5.2.3)
+      activesupport (>= 5.2.3, < 6.1.0)
       better-faraday (~> 1.0.5)
       faraday (~> 0.17)
       memoist (~> 0.16.0)
@@ -12,9 +12,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.2.4.2)
-      activesupport (= 5.2.4.2)
-    activesupport (5.2.4.2)
+    activemodel (5.2.4.3)
+      activesupport (= 5.2.4.3)
+    activesupport (5.2.4.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -35,14 +35,14 @@ GEM
     clamp (1.3.1)
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
-    connection_pool (2.2.2)
+    connection_pool (2.2.3)
     cookiejar (0.3.3)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     daemons (1.3.1)
     diff-lcs (1.3)
     docile (1.3.2)
-    em-http-request (1.1.5)
+    em-http-request (1.1.6)
       addressable (>= 2.3.4)
       cookiejar (!= 0.3.1)
       em-socksify (>= 0.3)
@@ -60,7 +60,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.13.1)
       faraday (>= 0.7.4, < 1.0)
-    faye (1.2.5)
+    faye (1.3.0)
       cookiejar (>= 0.3.0)
       em-http-request (>= 0.3.0)
       eventmachine (>= 0.12.0)
@@ -73,7 +73,7 @@ GEM
       websocket-driver (>= 0.5.1)
     hashdiff (1.0.1)
     http_parser.rb (0.6.0)
-    i18n (1.8.2)
+    i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     io-console (0.5.6)
     irb (1.2.3)
@@ -82,7 +82,7 @@ GEM
     jwt (2.2.1)
     memoist (0.16.2)
     method_source (1.0.0)
-    minitest (5.14.0)
+    minitest (5.14.1)
     mocha (1.11.2)
     multi_json (1.14.1)
     multipart-post (2.1.1)
@@ -92,7 +92,7 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.5)
       ast (~> 2.4.0)
-    peatio (2.4.4)
+    peatio (2.6.1)
       activemodel (> 5.2, <= 6.0.0)
       amqp
       bunny
@@ -161,9 +161,9 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket-driver (0.7.1)
+    websocket-driver (0.7.2)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
   ruby
