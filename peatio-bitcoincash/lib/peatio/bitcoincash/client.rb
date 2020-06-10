@@ -26,11 +26,8 @@ module Peatio
       end
 
       def json_rpc(method, params = [])
-        response = connection.post \
-          '/',
-          { jsonrpc: '1.0', method: method, params: params }.to_json,
-          { 'Accept'       => 'application/json',
-            'Content-Type' => 'application/json' }
+        response = post(method, params)
+
         response.assert_2xx!
         response = JSON.parse(response.body)
         response['error'].tap { |e| raise ResponseError.new(e['code'], e['message']) if e }
@@ -46,6 +43,11 @@ module Peatio
       end
 
       private
+
+      def post(method, params)
+        connection.post("/", {jsonrpc: "1.0", method: method, params: params}.to_json,
+                        "Accept" => "application/json", "Content-Type" => "application/json")
+      end
 
       def connection
         @connection ||= Faraday.new(@json_rpc_endpoint) do |f|

@@ -75,7 +75,7 @@ RSpec.describe Peatio::Bitcoincash::Client do
 
     context :connectionerror do
       before do
-        allow_any_instance_of(Faraday::Connection).to receive(:post).and_raise(Faraday::Error)
+        allow_any_instance_of(Faraday::Connection).to receive(:post).and_raise(Faraday::Error.new("Something went wrong"))
       end
 
       it do
