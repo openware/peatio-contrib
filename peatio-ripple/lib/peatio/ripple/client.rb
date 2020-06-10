@@ -27,11 +27,8 @@ module Peatio
       end
 
       def json_rpc(method, params = [])
-        response = connection.post \
-          '/',
-          { jsonrpc: '2.0', id: rpc_call_id, method: method, params: params }.to_json,
-          { 'Accept'       => 'application/json',
-            'Content-Type' => 'application/json' }
+        response = post(method, params)
+
         response.assert_2xx!
         response = JSON.parse(response.body)
         response.fetch('result').tap do |result|
@@ -49,6 +46,11 @@ module Peatio
       end
 
       private
+
+      def post(method, params)
+        connection.post("/", {jsonrpc: "2.0", id: rpc_call_id, method: method, params: params}.to_json,
+                        "Accept" => "application/json", "Content-Type" => "application/json")
+      end
 
       def rpc_call_id
         @json_rpc_call_id += 1
