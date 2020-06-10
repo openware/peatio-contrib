@@ -8,8 +8,11 @@ module Peatio::Electrum
   class Wallet < Peatio::Wallet::Abstract
     attr_reader :client
 
-    def initialize(settings = {})
-      @settings = settings
+    DEFAULT_FEATURES = { skip_deposit_collection: false }.freeze
+
+    def initialize(custom_features = {})
+      @features = DEFAULT_FEATURES.merge(custom_features).slice(*SUPPORTED_FEATURES)
+      @settings = {}
     end
 
     # Merges given configuration parameters with defined during initialization
