@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-bitcoincash (2.5.3)
+    peatio-bitcoincash (2.5.4)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       cash-addr (~> 0.2.0)
