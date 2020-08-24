@@ -2,6 +2,7 @@ module Peatio
   module Bitgo
     class Wallet < Peatio::Wallet::Abstract
       TIME_DIFFERENCE_IN_MINUTES = 10
+      XLM_MEMO_TYPES = { 'memoId': 'id', 'memoText': 'text', 'memoHash': 'hash', 'memoReturn': 'return' }
 
       def initialize(settings = {})
         @settings = settings
@@ -57,7 +58,7 @@ module Peatio
           end
 
           txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
-                                 address: transaction.to_address.to_s,
+                                 address: normalize_address(transaction.to_address.to_s),
                                  amount: amount.to_s,
                                  walletPassphrase: bitgo_wallet_passphrase,
                                  memo: xlm_memo(transaction.to_address.to_s)
@@ -221,19 +222,25 @@ module Peatio
       end
 
       def xlm_memo(address)
-        if @currency.fetch(:id) == 'xlm'
-            {
-              type: "id",
-              value: "#{memo_id_from(address)}"
-            }
+        build_xlm_memo(address) if @currency.fetch(:id) == 'xlm'
+      end
+
+      def build_xlm_memo(address)
+        case address.split('?').last.split('=').first
+        when 'memoId'
+          memo_value_from(address, 'memoId')
+        when 'memoText'
+          memo_value_from(address, 'memoText')
+        when 'memoHash'
+          memo_value_from(address, 'memoHash')
+        when 'memoReturn'
+          memo_value_from(address, 'memoReturn')
         end
       end
 
-      def memo_id_from(address)
-        memo_id = address.partition('memoId=').last
-        memo_id = 0 if memo_id.empty?
-
-        memo_id
+      def memo_value_from(address, type)
+        memo_value = address.partition(type + '=').last
+        return { type: XLM_MEMO_TYPES[type.to_sym], value: memo_value } if memo_value.present?
       end
 
       def currency_id
@@ -246,6 +253,14 @@ module Peatio
 
       def wallet_id
         @wallet.fetch(:wallet_id)
+      end
+
+      def normalize_address(address)
+        if @currency.fetch(:id) == 'xlm'
+          address.split('?').first
+        else
+          address
+        end
       end
 
       def normalize_txid(txid)
