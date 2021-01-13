@@ -54,6 +54,7 @@ module Peatio
           # than change status to opposite one before ledger is final.
           # Need to set special status and recheck this transaction status
           if result['engine_result'].to_s == 'tesSUCCESS' && result['status'].to_s == 'success'
+            transaction.currency_id = 'xrp' if transaction.currency_id.blank?
             transaction.hash = result.fetch('tx_json').fetch('hash')
           else
             raise Error, "XRP withdrawal from #{@wallet.fetch(:address)} to #{transaction.to_address} failed. Message: #{error_message}."
