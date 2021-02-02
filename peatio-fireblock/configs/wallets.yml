@@ -1,0 +1,54 @@
+
+- name:             Ethereum Deposit Wallet
+  blockchain_key:   eth-rinkeby
+  currency_id:      eth
+  # Address where deposits will be collected to.
+  address:          '0x2b9fBC10EbAeEc28a8Fc10069C0BC29E45eBEB9C'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             deposit  # Wallet kind (deposit, hot, warm, cold or fee).
+  max_balance:      0.0
+  status:           active
+  gateway:          geth     # Gateway client name.
+  settings:
+    #
+    # Geth gateway client settings.
+    uri:          http://127.0.0.1:8545
+    secret:       'changeme'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'
+
+- name:             Ethereum Hot Wallet
+  blockchain_key:   eth-rinkeby
+  currency_id:      eth
+  # Address where deposits will be collected to.
+  address:          '0x270704935783087a01c7a28d8f2d8f01670c8050'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             hot     # Wallet kind (deposit, hot, warm, cold or fee).
+  max_balance:      100.0
+  status:           active
+  gateway:          geth    # Gateway client name.
+  settings:
+    #
+    # Geth gateway client settings.
+    uri:          http://127.0.0.1:8545
+    secret:       'test'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'
+
+- name:             Ethereum Warm Wallet
+  blockchain_key:   eth-rinkeby
+  currency_id:      eth
+  # Address where deposits will be collected to.
+  address:          '0x2b9fBC10EbAeEc28a8Fc10069C0BC29E45eBEB9C'  # IMPORTANT: Always wrap this value in quotes!
+  kind:             warm    # Wallet kind (deposit, hot, warm, cold or fee).
+  max_balance:      1000.0
+  status:           active
+  gateway:          geth    # Gateway client name.
+  settings:
+    #
+    # Geth gateway client settings.
+    uri:          http://127.0.0.1:8545
+    secret:       'test'
+    testnet: true
+    access_token: 'v2x659261647b540ee3acda5c50ae4e878we323474eea5cbff9b9615139629'
+    wallet_id: '5e5388ad80334347ceb3540c741d'
