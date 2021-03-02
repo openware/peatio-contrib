@@ -119,16 +119,21 @@ module Peatio
         raise Peatio::Wallet::ClientError, e
       end
 
-      def trigger_webhook_event(event)
+      def trigger_webhook_event(request)
         currency = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
-        return unless currency == event['coin'] && @wallet.fetch(:wallet_id) == event['wallet']
+        if request.params['type'] == 'transfer'
+          return unless currency == request.params['coin'] &&
+                        @wallet.fetch(:wallet_id) == request.params['wallet']
+        else
+          return unless @wallet.fetch(:wallet_id) == request.params['walletId']
+        end
 
-        if event['type'] == 'transfer'
-          transactions = fetch_transfer!(event['transfer'])
-          return { transfers: transactions }
-        elsif event['type'] == 'address_confirmation'
-          address_id = fetch_address_id(event['address'])
-          return { address_id: address_id, currency_id: currency_id }
+        if request.params['type'] == 'transfer'
+          transactions = fetch_transfer!(request.params['transfer'])
+          return transactions
+        elsif request.params['type'] == 'address_confirmation'
+          address_id = fetch_address_id(request.params['address'])
+          return { address_id: address_id, address: request.params['address'], currency_id: currency_id }
         end
       end
 
