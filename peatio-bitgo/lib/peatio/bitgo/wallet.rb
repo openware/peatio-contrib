@@ -161,8 +161,7 @@ module Peatio
             hash: normalize_txid(response['txid']),
             to_address: to_address,
             block_number: response['height'],
-            # TODO: Add sendmany support
-            txout: 0,
+            txout: response['index'].to_i,
             status: state
           )
 
