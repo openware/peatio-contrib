@@ -146,7 +146,6 @@ module Peatio
       end
 
       def fetch_transfer!(id)
-        # TODO: Add Rspecs for this one
         response = client.rest_api(:get, "#{currency_id}/wallet/#{wallet_id}/transfer/#{id}")
         parse_entries(response['entries']).map do |entry|
           to_address =  if response.dig('coinSpecific', 'memo').present?
@@ -158,13 +157,18 @@ module Peatio
                         end
           state = define_transaction_state(response['state'])
 
+          if response['outputs'].present?
+            output = response['outputs'].find { |out| out['address'] == to_address }
+            txout = output['index'] if output.present?
+          end
+
           transaction = Peatio::Transaction.new(
             currency_id: @currency.fetch(:id),
             amount: convert_from_base_unit(entry['valueString']),
             hash: normalize_txid(response['txid']),
             to_address: to_address,
             block_number: response['height'],
-            txout: response['index'].to_i,
+            txout: txout.to_i,
             status: state
           )
 
