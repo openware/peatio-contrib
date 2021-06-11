@@ -86,7 +86,15 @@ module Peatio
 
       def create_eth_transaction(transaction, options = {})
         amount = convert_to_base_unit(transaction.amount)
-        hop = true unless options.slice(:erc20_contract_address).present?
+        hop = options.slice(:erc20_contract_address).present? ? false : true
+
+        fee_estimate = fee_estimate(amount.to_s, hop)
+
+        if transaction.options.present?
+          options[:gas_price] = transaction.options[:gas_price]
+        else
+          options[:gas_price] = fee_estimate['minGasPrice'].to_i
+        end
 
         txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
           address: transaction.to_address.to_s,
@@ -98,7 +106,12 @@ module Peatio
         }.compact).fetch('txid')
 
         transaction.hash = normalize_txid(txid)
+        transaction.options = options
         transaction
+      end
+
+      def fee_estimate(amount, hop)
+        client.rest_api(:get, "#{erc20_currency_id}/tx/fee", {amount: amount, hop: hop})
       end
 
       def load_balance!
