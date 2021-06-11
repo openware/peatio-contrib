@@ -603,18 +603,31 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
       let(:request_method) { :post }
       let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
-
+      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000&hop=false' }
+      let(:estimate_response_body) {
+        {
+          "feeEstimate": "0.00121",
+          "gasLimitEstimate": "12000",
+          "minGasPrice": "45000",
+          "minGasLimit": "21000",
+          "maxGasLimit": "56000",
+          "minGasIncreaseBy": "10000"
+        }.to_json
+      }
       before do
         stub_request(:post, uri + request_path)
           .with(body: request_body, headers: request_headers(settings[:wallet]))
           .to_return(status: 200, body: response_body)
+
+        stub_request(:get, estimate_url)
+          .to_return(status: 200, body: estimate_response_body)
       end
 
       let(:request_body) do
         {
           "address": transaction.to_address, "amount": '1100000000000000000',
           "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-          "gasPrice": settings[:currency][:options][:gas_price]
+          "gasPrice": 45000, "hop": false
         }.to_json
       end
 
@@ -669,11 +682,25 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
       let(:request_method) { :post }
       let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
+      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000&hop=true' }
+      let(:estimate_response_body) {
+        {
+          "feeEstimate": "0.00121",
+          "gasLimitEstimate": "12000",
+          "minGasPrice": "45000",
+          "minGasLimit": "21000",
+          "maxGasLimit": "56000",
+          "minGasIncreaseBy": "10000"
+        }.to_json
+      }
 
       before do
         stub_request(:post, uri + request_path)
           .with(body: request_body, headers: request_headers(settings[:wallet]))
           .to_return(status: 200, body: response_body)
+
+        stub_request(:get, estimate_url)
+          .to_return(status: 200, body: estimate_response_body)
       end
 
       context 'with substract fee' do
@@ -681,7 +708,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           {
             "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-            "gasPrice": settings[:currency][:options][:gas_price], hop: true
+            "gasPrice": 45000, hop: true
           }.to_json
         end
 
@@ -699,7 +726,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           {
             "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-            "gasPrice": settings[:currency][:options][:gas_price], hop: true
+            "gasPrice": 45000, hop: true
           }.to_json
         end
 
