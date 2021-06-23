@@ -603,7 +603,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
       let(:request_method) { :post }
       let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
-      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000&hop=false' }
+      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000' }
       let(:estimate_response_body) {
         {
           "feeEstimate": "0.00121",
@@ -627,7 +627,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         {
           "address": transaction.to_address, "amount": '1100000000000000000',
           "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-          "gasPrice": 45000, "hop": false
+          "gasPrice": 45000
         }.to_json
       end
 
@@ -682,7 +682,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
       let(:request_method) { :post }
       let(:request_path) { '/teth/wallet/' + settings[:wallet][:wallet_id] + '/sendcoins' }
-      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000&hop=true' }
+      let(:estimate_url) { uri + '/teth/tx/fee?amount=1100000000000000000' }
       let(:estimate_response_body) {
         {
           "feeEstimate": "0.00121",
@@ -708,7 +708,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           {
             "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-            "gasPrice": 45000, hop: true
+            "gasPrice": 45000
           }.to_json
         end
 
@@ -726,7 +726,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           {
             "address": transaction.to_address, "amount": '1100000000000000000',
             "walletPassphrase": settings[:wallet][:secret], "gas": settings[:currency][:options][:gas_limit],
-            "gasPrice": 45000, hop: true
+            "gasPrice": 45000
           }.to_json
         end
 
