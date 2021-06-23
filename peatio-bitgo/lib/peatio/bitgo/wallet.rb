@@ -86,11 +86,11 @@ module Peatio
 
       def create_eth_transaction(transaction, options = {})
         amount = convert_to_base_unit(transaction.amount)
-        hop = options.slice(:erc20_contract_address).present? ? false : true
+        hop = true unless options.slice(:gas_price).present?
 
         fee_estimate = fee_estimate(amount.to_s, hop)
 
-        if transaction.options.present?
+        if transaction.options.present? && transaction.options[:gas_price].present?
           options[:gas_price] = transaction.options[:gas_price]
         else
           options[:gas_price] = fee_estimate['minGasPrice'].to_i
@@ -111,7 +111,7 @@ module Peatio
       end
 
       def fee_estimate(amount, hop)
-        client.rest_api(:get, "#{erc20_currency_id}/tx/fee", {amount: amount, hop: hop})
+        client.rest_api(:get, "#{erc20_currency_id}/tx/fee", { amount: amount, hop: hop }.compact)
       end
 
       def load_balance!
