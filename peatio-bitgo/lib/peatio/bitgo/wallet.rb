@@ -60,14 +60,18 @@ module Peatio
             amount -= fee.to_i
           end
 
-          txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
+          response = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
                                  address: normalize_address(transaction.to_address.to_s),
                                  amount: amount.to_s,
                                  walletPassphrase: bitgo_wallet_passphrase,
                                  memo: xlm_memo(transaction.to_address.to_s)
-          }.compact).fetch('txid')
+          }.compact)
 
-          transaction.hash = normalize_txid(txid)
+          fee = convert_from_base_unit(response['feeString'])
+
+          transaction.hash = normalize_txid(response['txid'])
+          transaction.fee = fee
+          transaction.fee_currency_id = erc20_currency_id
           transaction
         end
       rescue Bitgo::Client::Error => e
@@ -96,17 +100,21 @@ module Peatio
           options[:gas_price] = fee_estimate['minGasPrice'].to_i
         end
 
-        txid = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
+        response = client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/sendcoins", {
           address: transaction.to_address.to_s,
           amount: amount.to_s,
           walletPassphrase: bitgo_wallet_passphrase,
           gas: options.fetch(:gas_limit).to_i,
           gasPrice: options.fetch(:gas_price).to_i,
           hop: hop
-        }.compact).fetch('txid')
+        }.compact)
 
-        transaction.hash = normalize_txid(txid)
+        fee = convert_from_base_unit(response['feeString'])
+
+        transaction.hash = normalize_txid(response['txid'])
+        transaction.fee_currency_id = erc20_currency_id
         transaction.options = options
+        transaction.fee = fee
         transaction
       end
 
@@ -180,9 +188,12 @@ module Peatio
             txout = output['index'] if output.present?
           end
 
+          fee = convert_from_base_unit(response['feeString']) / response['entries'].count
           transaction = Peatio::Transaction.new(
             currency_id: @currency.fetch(:id),
             amount: convert_from_base_unit(entry['valueString']),
+            fee: fee,
+            fee_currency_id: erc20_currency_id,
             hash: normalize_txid(response['txid']),
             to_address: to_address,
             block_number: response['height'],
