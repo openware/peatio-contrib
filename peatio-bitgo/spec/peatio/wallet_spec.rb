@@ -337,6 +337,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
             "transfer": {},
             "txid": 'x123123483791e27387sd945384554ui34jw',
             "tx": 'a234343234',
+            "feeString": "10001",
             "status": 'signed'
           }.to_json
         end
@@ -365,6 +366,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
           expect(result.status).to eq('pending')
+          expect(result.fee_currency_id).to eq('btc')
+          expect(result.fee).to eq(0.00010001)
         end
       end
 
@@ -380,6 +383,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
             "transfer": {},
             "txid": 'x123123483791e27387sd945384554ui34jw',
             "tx": 'a234343234',
+            "feeString": "10001",
             "status": 'signed'
           }.to_json
         end
@@ -407,6 +411,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
           expect(result.status).to eq('pending')
+          expect(result.fee_currency_id).to eq('btc')
+          expect(result.fee).to eq(0.00010001)
         end
       end
     end
@@ -442,6 +448,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           "transfer": {},
           "txid": 'x123123483791e27387sd945384554ui34jw',
           "tx": 'a234343234',
+          "feeString": "10001",
           "status": 'signed'
         }.to_json
       end
@@ -481,6 +488,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf?memoId=2')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
           expect(result.status).to eq('pending')
+          expect(result.fee_currency_id).to eq('xlm')
+          expect(result.fee).to eq(0.0010001)
         end
       end
 
@@ -506,6 +515,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf?memoText=2')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
           expect(result.status).to eq('pending')
+          expect(result.fee_currency_id).to eq('xlm')
+          expect(result.fee).to eq(0.0010001)
         end
       end
 
@@ -530,6 +541,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.amount).to eq(1.1)
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf?memoHash=9253088f5e27dc97311534da0b4301b55cb2e8ad603ccd9194fd000021493912')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
+          expect(result.fee_currency_id).to eq('xlm')
+          expect(result.fee).to eq(0.0010001)
           expect(result.status).to eq('pending')
         end
       end
@@ -589,6 +602,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           "transfer": {},
           "txid": 'x123123483791e27387sd945384554ui34jw',
           "tx": 'a234343234',
+          "feeString": "1001",
           "status": 'signed'
         }.to_json
       end
@@ -636,6 +650,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
         expect(result.amount).to eq(1.1)
         expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
         expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
+        expect(result.fee_currency_id).to eq('eth')
+        expect(result.fee).to eq(0.000000000000001001)
         expect(result.status).to eq('pending')
       end
     end
@@ -668,6 +684,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
           "transfer": {},
           "txid": 'x123123483791e27387sd945384554ui34jw',
           "tx": 'a234343234',
+          "feeString": "1001",
           "status": 'signed'
         }.to_json
       end
@@ -717,6 +734,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.amount).to eq(1.1)
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
+          expect(result.fee_currency_id).to eq('eth')
+          expect(result.fee).to eq(0.000000000000001001)
           expect(result.status).to eq('pending')
         end
       end
@@ -735,6 +754,8 @@ RSpec.describe Peatio::Bitgo::Wallet do
           expect(result.amount).to eq(1.1)
           expect(result.to_address).to eq('2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf')
           expect(result.hash).to eq('x123123483791e27387sd945384554ui34jw')
+          expect(result.fee_currency_id).to eq('eth')
+          expect(result.fee).to eq(0.000000000000001001)
           expect(result.status).to eq('pending')
         end
       end
@@ -808,13 +829,6 @@ RSpec.describe Peatio::Bitgo::Wallet do
 
     let(:request_method) { :post }
     let(:request_path) { '/tbtc/wallet/' + settings[:wallet][:wallet_id] + '/transfer/603d4f4f04ff26000655309b8f908b60' }
-
-    before do
-      stub_request(:get, uri + request_path)
-        .with(headers: request_headers(settings[:wallet]))
-        .to_return(status: 200, body: response_body)
-    end
-
     let(:response_body) do
       {'id' => '603d4f4f04ff26000655309b8f908b60',
        'coin' => 'btc',
@@ -911,6 +925,12 @@ RSpec.describe Peatio::Bitgo::Wallet do
            'isSegwit' => false}],
        'normalizedTxHash' =>
          'e4fd676f5d1d1e2c08d5fe6f5e0aae247b81a614480f16fb6c278a0985e22a48'}.to_json
+    end
+
+    before do
+      stub_request(:get, uri + request_path)
+        .with(headers: request_headers(settings[:wallet]))
+        .to_return(status: 200, body: response_body)
     end
 
     it 'requests bitgo client and create address' do
