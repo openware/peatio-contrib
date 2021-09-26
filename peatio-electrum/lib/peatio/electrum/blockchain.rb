@@ -73,6 +73,8 @@ module Peatio::Electrum
           txs = []
           current_height = tx['height']
         end
+        fee = tx['fee']
+
         (tx['outputs'] || []).each_with_index do |out, i|
           @currencies_ids.each do |currency_id|
             txs << Peatio::Transaction.new(
@@ -82,7 +84,9 @@ module Peatio::Electrum
               amount: out['value'].to_d,
               status: 'success',
               block_number: tx['height'],
-              currency_id: currency_id
+              currency_id: currency_id,
+              fee_currency_id: currency_id,
+              fee: fee
             )
           end
         end
