@@ -67,10 +67,12 @@ module Peatio
                                  memo: xlm_memo(transaction.to_address.to_s)
           }.compact)
 
-          fee = convert_from_base_unit(response['feeString'])
+          if response['feeString'].present?
+            fee = convert_from_base_unit(response['feeString'])
+            transaction.fee = fee
+          end
 
           transaction.hash = normalize_txid(response['txid'])
-          transaction.fee = fee
           transaction.fee_currency_id = erc20_currency_id
           transaction
         end
@@ -109,12 +111,14 @@ module Peatio
           hop: hop
         }.compact)
 
-        fee = convert_from_base_unit(response['feeString'])
+        if response['feeString'].present?
+          fee = convert_from_base_unit(response['feeString'])
+          transaction.fee = fee
+        end
 
         transaction.hash = normalize_txid(response['txid'])
         transaction.fee_currency_id = erc20_currency_id
         transaction.options = options
-        transaction.fee = fee
         transaction
       end
 
@@ -188,7 +192,10 @@ module Peatio
             txout = output['index'] if output.present?
           end
 
-          fee = convert_from_base_unit(response['feeString']) / response['entries'].count
+          if response['feeString'].present?
+            fee = convert_from_base_unit(response['feeString']) / response['entries'].count
+          end
+
           transaction = Peatio::Transaction.new(
             currency_id: @currency.fetch(:id),
             amount: convert_from_base_unit(entry['valueString']),
