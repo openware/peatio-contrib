@@ -95,7 +95,7 @@ GEM
       thin
     prometheus-client (2.1.0)
     public_suffix (4.0.6)
-    rack (2.2.3)
+    rack (2.2.6.2)
     rbtree (0.4.4)
     reline (0.1.4)
       io-console (~> 0.5)
