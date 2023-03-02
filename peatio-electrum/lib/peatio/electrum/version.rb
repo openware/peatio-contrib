@@ -2,6 +2,6 @@
 
 module Peatio
   module Electrum
-    VERSION = "2.6.3".freeze
+    VERSION = "3.1.0".freeze
   end
 end

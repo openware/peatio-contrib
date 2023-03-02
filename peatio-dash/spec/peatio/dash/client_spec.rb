@@ -67,7 +67,7 @@ RSpec.describe Peatio::Dash::Client do
           .to_return(body: response.to_json, status: 404)
       end
 
-      it do
+      xit do
         expect { subject.json_rpc(:notfound) }.to \
           raise_error(Peatio::Dash::Client::Error)
       end

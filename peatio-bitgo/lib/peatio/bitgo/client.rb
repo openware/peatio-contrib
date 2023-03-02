@@ -38,7 +38,7 @@ module Peatio
         args.last['Authorization'] = 'Bearer ' + @access_token
 
         response = Faraday.send(verb, *args)
-        response.assert_success!
+        response.assert_2xx!
         response = JSON.parse(response.body)
         response['error'].tap { |error| raise ResponseError.new(error) if error }
         response
