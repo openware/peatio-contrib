@@ -4,7 +4,6 @@ require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/enumerable'
 require 'peatio'
 require 'faraday'
-require 'faraday_middleware'
 require 'json'
 
 module Peatio

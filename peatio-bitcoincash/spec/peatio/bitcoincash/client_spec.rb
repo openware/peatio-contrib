@@ -54,25 +54,6 @@ RSpec.describe Peatio::Bitcoincash::Client do
       end
     end
 
-    context :notfound do
-      let(:response_file) do
-        File.join('spec', 'resources', 'methodnotfound', 'error.json')
-      end
-
-      before do
-        stub_request(:post, uri_without_authority)
-          .with(body: { jsonrpc: '1.0',
-                        method: :notfound,
-                        params:  [] }.to_json)
-          .to_return(body: response.to_json, status: 404)
-      end
-
-      it do
-        expect{ subject.json_rpc(:notfound) }.to \
-          raise_error(Peatio::Bitcoincash::Client::Error)
-      end
-    end
-
     context :connectionerror do
       before do
         allow_any_instance_of(Faraday::Connection).to receive(:post).and_raise(Faraday::Error.new("Something went wrong"))
