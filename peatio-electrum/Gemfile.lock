@@ -115,7 +115,7 @@ GEM
       thin
     prometheus-client (4.0.0)
     public_suffix (5.0.1)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rbtree (0.4.6)
     reline (0.3.2)
       io-console (~> 0.5)
@@ -161,6 +161,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.4.7)
