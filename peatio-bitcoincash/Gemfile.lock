@@ -130,7 +130,7 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (5.0.1)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rake (13.0.6)
     rbtree (0.4.6)
     rexml (3.2.5)
@@ -169,6 +169,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.4.7)
