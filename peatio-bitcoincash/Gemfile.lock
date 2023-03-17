@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     peatio-bitcoincash (3.1.0)
-      activesupport (~> 6.1.0)
+      activesupport (>= 6.1, < 7.1)
       better-faraday (~> 2.0.1)
       cash-addr (~> 0.2.0)
       faraday (~> 1.10)
@@ -13,9 +13,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (6.1.7.2)
-      activesupport (= 6.1.7.2)
-    activesupport (6.1.7.2)
+    activemodel (6.1.7.3)
+      activesupport (= 6.1.7.3)
+    activesupport (6.1.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -101,7 +101,7 @@ GEM
     jwt (2.7.0)
     memoist (0.16.2)
     method_source (1.0.0)
-    minitest (5.17.0)
+    minitest (5.18.0)
     mocha (1.16.1)
     multi_json (1.15.0)
     multipart-post (2.3.0)
@@ -169,6 +169,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.4.7)
