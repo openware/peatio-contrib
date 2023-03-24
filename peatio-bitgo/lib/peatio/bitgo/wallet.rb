@@ -4,7 +4,8 @@ module Peatio
       TIME_DIFFERENCE_IN_MINUTES = 10
       XLM_MEMO_TYPES = { 'memoId': 'id', 'memoText': 'text', 'memoHash': 'hash', 'memoReturn': 'return' }
 
-      DEFAULT_FEATURES = { skip_deposit_collection: false }.freeze
+      DEFAULT_FEATURES = { skip_deposit_collection: false, testnet: false }.freeze
+      SUPPORTED_FEATURES = SUPPORTED_FEATURES + [:testnet]
 
       def initialize(custom_features = {})
         @features = DEFAULT_FEATURES.merge(custom_features).slice(*SUPPORTED_FEATURES)
@@ -145,7 +146,7 @@ module Peatio
       end
 
       def trigger_webhook_event(request)
-        currency = @wallet.fetch(:testnet).present? ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
+        currency = @wallet[:testnet].to_s == 'true' ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
         if request.params['type'] == 'transfer'
           return unless currency == request.params['coin'] &&
                         @wallet.fetch(:wallet_id) == request.params['wallet']
@@ -214,6 +215,17 @@ module Peatio
         raise Peatio::Wallet::ClientError, e
       end
 
+      def extract_asset_id(request)
+        asset_id = request.params[:coin]
+        extract_asset(asset_id)
+      end
+
+      def extract_asset(asset_id)
+        return asset_id[1...] if @features.fetch(:testnet).to_s == 'true'
+
+        asset_id
+      end
+
       def transfer_webhook(url)
         client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/webhooks", {
           type: 'transfer',
@@ -246,7 +258,7 @@ module Peatio
         uri = @wallet.fetch(:uri) { raise Peatio::Wallet::MissingSettingError, :uri }
         access_token = @wallet.fetch(:access_token) { raise Peatio::Wallet::MissingSettingError, :access_token }
 
-        currency_code_prefix = @wallet.fetch(:testnet) ? 't' : ''
+        currency_code_prefix = @wallet[:testnet].to_s == 'true' ? 't' : ''
         uri = uri.gsub(/\/+\z/, '') + '/' + currency_code_prefix
         @client ||= Client.new(uri, access_token)
       end
