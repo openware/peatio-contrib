@@ -22,7 +22,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         id: 'btc',
         base_factor: 100_000_000,
         code: 'btc',
-        options: {}
+        options: {chain_id: '1'}
       }
     }
   end

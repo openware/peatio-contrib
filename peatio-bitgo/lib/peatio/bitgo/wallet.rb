@@ -3,6 +3,14 @@ module Peatio
     class Wallet < Peatio::Wallet::Abstract
       TIME_DIFFERENCE_IN_MINUTES = 10
       XLM_MEMO_TYPES = { 'memoId': 'id', 'memoText': 'text', 'memoHash': 'hash', 'memoReturn': 'return' }
+      BITGO_CURRENCY_IDS = { 'matic': 'polygon' }.freeze
+      CHAIN_IDS_COINS = {
+        1 => 'eth',
+        137 => 'polygon',
+        # NOTE: testnet ETH will not work with this because of gteth
+        5 => 'eth',
+        80_001 => 'polygon'
+      }.freeze
 
       DEFAULT_FEATURES = { skip_deposit_collection: false, testnet: false }.freeze
       SUPPORTED_FEATURES = SUPPORTED_FEATURES + [:testnet]
@@ -46,7 +54,7 @@ module Peatio
       end
 
       def create_transaction!(transaction, options = {})
-        currency_options = @currency.fetch(:options).slice(:gas_limit, :gas_price, :erc20_contract_address)
+        currency_options = @currency.fetch(:options).slice(:gas_limit, :gas_price, :erc20_contract_address, :chain_id)
 
         if currency_options[:gas_limit].present? && currency_options[:gas_price].present?
           options.merge!(currency_options)
@@ -80,7 +88,6 @@ module Peatio
       rescue Bitgo::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
-
 
       def build_raw_transaction(transaction)
         client.rest_api(:post, "#{currency_id}/wallet/#{wallet_id}/tx/build", {
@@ -146,7 +153,7 @@ module Peatio
       end
 
       def trigger_webhook_event(request)
-        currency = @wallet[:testnet].to_s == 'true' ? 't' + @currency.fetch(:id) : @currency.fetch(:id)
+        currency = @wallet[:testnet].to_s == 'true' ? 't' + currency_id : currency_id
         if request.params['type'] == 'transfer'
           return unless currency == request.params['coin'] &&
                         @wallet.fetch(:wallet_id) == request.params['wallet']
@@ -267,12 +274,22 @@ module Peatio
         "#{address}?memoId=#{memo['value']}"
       end
 
-      # All these functions will have to be done with the coin set to eth or teth
-      # since that is the actual coin type being used.
       def erc20_currency_id
-        return 'eth' if @currency.fetch(:options).slice(:erc20_contract_address).present?
+        chain_id = @currency.fetch(:options)[:chain_id]
+        pp @currency.fetch(:options).slice(:erc20_contract_address).present? && CHAIN_IDS_COINS[chain_id.to_i].present?
+        pp "SELECTED TOKEN ID", CHAIN_IDS_COINS[chain_id.to_i]
+        if @currency.fetch(:options).slice(:erc20_contract_address).present? && CHAIN_IDS_COINS[chain_id.to_i].present?
+          return CHAIN_IDS_COINS[chain_id.to_i]
+        end
 
         currency_id
+      end
+
+      def currency_id
+        cur_id = @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
+        return BITGO_CURRENCY_IDS[cur_id.to_sym] if BITGO_CURRENCY_IDS[cur_id.to_sym].present?
+
+        cur_id
       end
 
       def xlm_memo(address)
@@ -295,10 +312,6 @@ module Peatio
       def memo_value_from(address, type)
         memo_value = address.partition(type + '=').last
         return { type: XLM_MEMO_TYPES[type.to_sym], value: memo_value } if memo_value.present?
-      end
-
-      def currency_id
-        @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
       end
 
       def bitgo_wallet_passphrase
