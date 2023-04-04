@@ -4,12 +4,21 @@ module Peatio
       TIME_DIFFERENCE_IN_MINUTES = 10
       XLM_MEMO_TYPES = { 'memoId': 'id', 'memoText': 'text', 'memoHash': 'hash', 'memoReturn': 'return' }
       BITGO_CURRENCY_IDS = { 'matic': 'polygon' }.freeze
+      POLYGON_CHAIN_IDS = %w[137 80001].freeze
       CHAIN_IDS_COINS = {
         1 => 'eth',
         137 => 'polygon',
         # NOTE: testnet ETH will not work with this because of gteth
         5 => 'eth',
         80_001 => 'polygon'
+      }.freeze
+
+      LEGACY_CHAIN_IDS_COINS = {
+        1 => 'eth',
+        137 => 'matic',
+        # NOTE: testnet ETH will not work with this because of gteth
+        5 => 'eth',
+        80_001 => 'matic'
       }.freeze
 
       DEFAULT_FEATURES = { skip_deposit_collection: false, testnet: false }.freeze
@@ -82,7 +91,7 @@ module Peatio
           end
 
           transaction.hash = normalize_txid(response['txid'])
-          transaction.fee_currency_id = erc20_currency_id
+          transaction.fee_currency_id = fee_currency_id
           transaction
         end
       rescue Bitgo::Client::Error => e
@@ -125,7 +134,7 @@ module Peatio
         end
 
         transaction.hash = normalize_txid(response['txid'])
-        transaction.fee_currency_id = erc20_currency_id
+        transaction.fee_currency_id = fee_currency_id
         transaction.options = options
         transaction
       end
@@ -147,7 +156,12 @@ module Peatio
 
       def load_erc20_balance!
         response = client.rest_api(:get, "#{erc20_currency_id}/wallet/#{wallet_id}?allTokens=true")
-        convert_from_base_unit(response.dig('tokens', currency_id, 'balanceString'))
+        if @features.fetch(:testnet).to_s == 'true'
+          cur_id = "t#{currency_id}"
+        else
+          cur_id = currency_id
+        end
+        convert_from_base_unit(response.dig('tokens', cur_id, 'balanceString'))
       rescue Bitgo::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
@@ -208,7 +222,7 @@ module Peatio
             currency_id: @currency.fetch(:id),
             amount: convert_from_base_unit(entry['valueString']),
             fee: fee,
-            fee_currency_id: erc20_currency_id,
+            fee_currency_id: fee_currency_id,
             hash: normalize_txid(response['txid']),
             to_address: to_address,
             block_number: response['height'],
@@ -228,8 +242,10 @@ module Peatio
       end
 
       def extract_asset(asset_id)
-        return asset_id[1...] if @features.fetch(:testnet).to_s == 'true'
-
+        # Remove testnet 't' prefix
+        asset_id = asset_id[1...] if @features.fetch(:testnet).to_s == 'true'
+        # Split and remove network prefix e.g: polygon:link
+        _, asset_id = asset_id.split(':') if asset_id.include?(':')
         asset_id
       end
 
@@ -276,10 +292,17 @@ module Peatio
 
       def erc20_currency_id
         chain_id = @currency.fetch(:options)[:chain_id]
-        pp @currency.fetch(:options).slice(:erc20_contract_address).present? && CHAIN_IDS_COINS[chain_id.to_i].present?
-        pp "SELECTED TOKEN ID", CHAIN_IDS_COINS[chain_id.to_i]
         if @currency.fetch(:options).slice(:erc20_contract_address).present? && CHAIN_IDS_COINS[chain_id.to_i].present?
           return CHAIN_IDS_COINS[chain_id.to_i]
+        end
+
+        currency_id
+      end
+
+      def fee_currency_id
+        chain_id = @currency.fetch(:options)[:chain_id]
+        if @currency.fetch(:options).slice(:erc20_contract_address).present? && LEGACY_CHAIN_IDS_COINS[chain_id.to_i].present?
+          return LEGACY_CHAIN_IDS_COINS[chain_id.to_i]
         end
 
         currency_id
@@ -289,7 +312,15 @@ module Peatio
         cur_id = @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
         return BITGO_CURRENCY_IDS[cur_id.to_sym] if BITGO_CURRENCY_IDS[cur_id.to_sym].present?
 
+        if POLYGON_CHAIN_IDS.include?(@currency.fetch(:options)[:chain_id]) && @currency.fetch(:options).slice(:erc20_contract_address).present?
+          return build_polygon_erc20_id(cur_id)
+        end
+
         cur_id
+      end
+
+      def build_polygon_erc20_id(id)
+        "polygon:#{id}"
       end
 
       def xlm_memo(address)
