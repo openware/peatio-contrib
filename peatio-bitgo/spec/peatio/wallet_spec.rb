@@ -22,7 +22,7 @@ RSpec.describe Peatio::Bitgo::Wallet do
         id: 'btc',
         base_factor: 100_000_000,
         code: 'btc',
-        options: {chain_id: '1'}
+        options: {}
       }
     }
   end
@@ -791,6 +791,376 @@ RSpec.describe Peatio::Bitgo::Wallet do
       expect(result).to eq('d9c359f727a22320b214afa9184f3')
     end
   end
+
+  context 'currency_id' do
+
+    around do |example|
+      WebMock.disable_net_connect!
+      example.run
+      WebMock.allow_net_connect!
+    end
+
+    context 'testnet' do
+
+      let(:currency_id) { 'btc' }
+      let(:options) { {} }
+
+      let(:settings) do
+        {
+          wallet: {
+            address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf',
+            uri: uri,
+            secret: 'changeme',
+            access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+            wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+            testnet: true
+          },
+          currency: {
+            id: currency_id,
+            base_factor: 1_000_000_00,
+            code: currency_id,
+            options: options
+          }
+        }
+      end
+
+      before do
+        wallet.configure(settings)
+      end
+
+      it do
+        expect(wallet.send(:currency_id)).to eq('btc')
+      end
+
+      context 'eth' do
+        let(:currency_id) { 'eth' }
+        let(:options) do
+          {
+            chain_id: '5'
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('eth')
+        end
+      end
+
+      context 'matic' do
+        let(:currency_id) { 'matic' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('polygon')
+        end
+      end
+
+      context 'polygon' do
+        let(:currency_id) { 'polygon' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('polygon')
+        end
+      end
+
+      context 'polygon link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '80001',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('polygon:link')
+        end
+      end
+
+      context 'avax' do
+        let(:currency_id) { 'avax' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            # erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('avaxc')
+        end
+      end
+
+      context 'avax link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:currency_id)).to eq('avaxc:link')
+        end
+      end
+    end
+  end
+
+  context 'erc20_currency_id' do
+
+    around do |example|
+      WebMock.disable_net_connect!
+      example.run
+      WebMock.allow_net_connect!
+    end
+
+    context 'testnet' do
+
+      let(:currency_id) { 'btc' }
+      let(:options) { {} }
+
+      let(:settings) do
+        {
+          wallet: {
+            address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf',
+            uri: uri,
+            secret: 'changeme',
+            access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+            wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+            testnet: true
+          },
+          currency: {
+            id: currency_id,
+            base_factor: 1_000_000_00,
+            code: currency_id,
+            options: options
+          }
+        }
+      end
+
+      before do
+        wallet.configure(settings)
+      end
+
+      it do
+        expect(wallet.send(:erc20_currency_id)).to eq('btc')
+      end
+
+      context 'eth' do
+        let(:currency_id) { 'eth' }
+        let(:options) do
+          {
+            chain_id: '5'
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('eth')
+        end
+      end
+
+      context 'matic' do
+        let(:currency_id) { 'matic' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('polygon')
+        end
+      end
+
+      context 'polygon' do
+        let(:currency_id) { 'polygon' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('polygon')
+        end
+      end
+
+      context 'polygon link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '80001',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('polygon')
+        end
+      end
+
+      context 'avax' do
+        let(:currency_id) { 'avax' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            # erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('avaxc')
+        end
+      end
+
+      context 'avax link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:erc20_currency_id)).to eq('avaxc')
+        end
+      end
+    end
+  end
+
+  context 'fee_currency_id' do
+
+    around do |example|
+      WebMock.disable_net_connect!
+      example.run
+      WebMock.allow_net_connect!
+    end
+
+    context 'testnet' do
+
+      let(:currency_id) { 'btc' }
+      let(:options) { {} }
+
+      let(:settings) do
+        {
+          wallet: {
+            address: '2N4qYjye5yENLEkz4UkLFxzPaxJatF3kRwf',
+            uri: uri,
+            secret: 'changeme',
+            access_token: 'v2x0b53e612518e5ea625eb3c24175438b37f56bc1f82e9c9ba3b038c91b0c72e67',
+            wallet_id: '5a7d9f52ba1923b107b80baabe0c3574',
+            testnet: true
+          },
+          currency: {
+            id: currency_id,
+            base_factor: 1_000_000_00,
+            code: currency_id,
+            options: options
+          }
+        }
+      end
+
+      before do
+        wallet.configure(settings)
+      end
+
+      it do
+        expect(wallet.send(:fee_currency_id)).to eq('btc')
+      end
+
+      context 'eth' do
+        let(:currency_id) { 'eth' }
+        let(:options) do
+          {
+            chain_id: '5'
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('eth')
+        end
+      end
+
+      context 'matic' do
+        let(:currency_id) { 'matic' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('matic')
+        end
+      end
+
+      context 'polygon' do
+        let(:currency_id) { 'polygon' }
+        let(:options) do
+          {
+            chain_id: '80001'
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('matic')
+        end
+      end
+
+      context 'polygon link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '80001',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('matic')
+        end
+      end
+
+      context 'avax' do
+        let(:currency_id) { 'avax' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            # erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('avax')
+        end
+      end
+
+      context 'avax link' do
+        let(:currency_id) { 'link' }
+        let(:options) do
+          {
+            chain_id: '43113',
+            erc20_contract_address: '0xbasdc',
+          }
+        end
+
+        it do
+          expect(wallet.send(:fee_currency_id)).to eq('avax')
+        end
+      end
+    end
+  end
+
 
   context 'fetch_transfer!' do
 

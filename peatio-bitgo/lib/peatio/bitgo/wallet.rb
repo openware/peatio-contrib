@@ -4,13 +4,17 @@ module Peatio
       TIME_DIFFERENCE_IN_MINUTES = 10
       XLM_MEMO_TYPES = { 'memoId': 'id', 'memoText': 'text', 'memoHash': 'hash', 'memoReturn': 'return' }
       BITGO_CURRENCY_IDS = { 'matic': 'polygon' }.freeze
-      POLYGON_CHAIN_IDS = %w[137 80001].freeze
+      LEGACY_BITGO_CURRENCY_IDS = { 'polygon': 'matic', 'avaxc': 'avax' }.freeze
+      POLYGON_CHAIN_IDS = [137, 80_001].freeze
+      AVAX_CHAIN_IDS = [43_114, 43_113].freeze
       CHAIN_IDS_COINS = {
         1 => 'eth',
         137 => 'polygon',
         # NOTE: testnet ETH will not work with this because of gteth
         5 => 'eth',
-        80_001 => 'polygon'
+        80_001 => 'polygon',
+        43_114 => 'avaxc',
+        43_113 => 'avaxc'
       }.freeze
 
       LEGACY_CHAIN_IDS_COINS = {
@@ -18,7 +22,9 @@ module Peatio
         137 => 'matic',
         # NOTE: testnet ETH will not work with this because of gteth
         5 => 'eth',
-        80_001 => 'matic'
+        80_001 => 'matic',
+        43_114 => 'avax',
+        43_113 => 'avax'
       }.freeze
 
       DEFAULT_FEATURES = { skip_deposit_collection: false, testnet: false }.freeze
@@ -215,7 +221,7 @@ module Peatio
           end
 
           if response['feeString'].present?
-            fee = convert_from_base_unit(response['feeString']) / response['entries'].count
+            fee = convert_from_base_unit(response['feeString'])
           end
 
           transaction = Peatio::Transaction.new(
@@ -246,6 +252,9 @@ module Peatio
         asset_id = asset_id[1...] if @features.fetch(:testnet).to_s == 'true'
         # Split and remove network prefix e.g: polygon:link
         _, asset_id = asset_id.split(':') if asset_id.include?(':')
+        # Convert such coins as polygon and avaxc to legacy names
+        return LEGACY_BITGO_CURRENCY_IDS[asset_id.to_sym] if LEGACY_BITGO_CURRENCY_IDS[asset_id.to_sym].present?
+
         asset_id
       end
 
@@ -300,8 +309,8 @@ module Peatio
       end
 
       def fee_currency_id
-        chain_id = @currency.fetch(:options)[:chain_id]
-        if @currency.fetch(:options).slice(:erc20_contract_address).present? && LEGACY_CHAIN_IDS_COINS[chain_id.to_i].present?
+        chain_id = @currency.fetch(:options)[:chain_id].to_i
+        if LEGACY_CHAIN_IDS_COINS[chain_id].present?
           return LEGACY_CHAIN_IDS_COINS[chain_id.to_i]
         end
 
@@ -310,10 +319,19 @@ module Peatio
 
       def currency_id
         cur_id = @currency.fetch(:id) { raise Peatio::Wallet::MissingSettingError, :id }
-        return BITGO_CURRENCY_IDS[cur_id.to_sym] if BITGO_CURRENCY_IDS[cur_id.to_sym].present?
+        chain_id = @currency.fetch(:options)[:chain_id].to_i
+        erc20_contract_address = @currency.fetch(:options).slice(:erc20_contract_address)
 
-        if POLYGON_CHAIN_IDS.include?(@currency.fetch(:options)[:chain_id]) && @currency.fetch(:options).slice(:erc20_contract_address).present?
+        if POLYGON_CHAIN_IDS.include?(chain_id) && erc20_contract_address.present?
           return build_polygon_erc20_id(cur_id)
+        elsif POLYGON_CHAIN_IDS.include?(chain_id)
+          return CHAIN_IDS_COINS[chain_id] if CHAIN_IDS_COINS[chain_id].present?
+        end
+
+        if AVAX_CHAIN_IDS.include?(chain_id) && erc20_contract_address.present?
+          return build_avax_erc20_id(cur_id)
+        elsif AVAX_CHAIN_IDS.include?(chain_id)
+          return CHAIN_IDS_COINS[chain_id] if CHAIN_IDS_COINS[chain_id].present?
         end
 
         cur_id
@@ -322,6 +340,11 @@ module Peatio
       def build_polygon_erc20_id(id)
         "polygon:#{id}"
       end
+
+      def build_avax_erc20_id(id)
+        "avaxc:#{id}"
+      end
+
 
       def xlm_memo(address)
         build_xlm_memo(address) if @currency.fetch(:id) == 'xlm'
